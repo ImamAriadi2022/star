@@ -1,0 +1,40 @@
+.review-section {
+    background-color: #001A46; /* Warna biru gelap */
+    padding: 40px 0;
+  }
+  
+  .review-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 20px;
+    border-radius: 16px;
+    background-color: #002855; /* Warna biru medium */
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+  }
+  
+  .review-icon img {
+    width: 60px; /* Ukuran ikon */
+    height: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .review-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .review-label {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
