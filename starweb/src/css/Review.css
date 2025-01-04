@@ -16,9 +16,9 @@
   
   .review-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
     color: white;
+    gap: 10px;
   }
   
   .review-icon img {

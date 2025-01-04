@@ -5,12 +5,14 @@ function Review() {
   return (
     <section className="review-section">
       <div className="review-container">
-        <div className="review-item">
+        <div className="review-item d-flex">
           <div className="review-icon">
-            <img src="/path-to-influencer-icon.svg" alt="Influencer Icon" />
+            <img src="landing/influceicon.png" alt="Influencer Icon" />
           </div>
-          <h2 className="review-number">10.000 +</h2>
-          <p className="review-label">Influencer</p>
+          <div className="flex-decoration-column">
+            <h2 className="review-number">10.000 +</h2>
+            <p className="review-label">Influencer</p>
+          </div>
         </div>
         <div className="review-item">
           <div className="review-icon">
