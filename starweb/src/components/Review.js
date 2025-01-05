@@ -14,12 +14,14 @@ function Review() {
             <p className="review-label">Influencer</p>
           </div>
         </div>
-        <div className="review-item">
+        <div className="review-item ">
           <div className="review-icon">
-            <img src="/path-to-brands-icon.svg" alt="Brands Icon" />
+            <img src="landing/brandIcon.png" alt="Brands Icon" />
           </div>
-          <h2 className="review-number">5.000 +</h2>
-          <p className="review-label">Brands</p>
+          <div className="flex-decoration-column">
+            <h2 className="review-number">5.000 +</h2>
+            <p className="review-label">Brands</p>
+          </div>
         </div>
       </div>
     </section>
