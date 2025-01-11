@@ -47,7 +47,7 @@ function StarpowersVIP() {
         <div className="row text-center pt-5">
           {influencers.map((influencer) => (
             <div className="col-md-4" key={influencer.id}>
-              <div className="card">
+              <div className="card mb-4" style={{ backgroundColor: 'white', borderRadius: '12px' }}>
                 <img
                   src={influencer.image}
                   alt="Influencer"
@@ -58,16 +58,16 @@ function StarpowersVIP() {
                     <div className="col-12 d-flex align-items-center">
                       <p className="content-type jenis">{influencer.type}</p>
                       <br className="mx-1" />
-                      <p className="content-type medsos mx-2 text-light">{influencer.platform}</p>
+                      <p className="content-type medsos mx-2 text-dark">{influencer.platform}</p>
                     </div>
                     <div className="col-12">
-                      <h5 className="creator-name">{influencer.name}</h5>
+                      <h5 className="creator-name text-dark">{influencer.name}</h5>
                     </div>
                     <div className="col-12">
-                      <p className="platform-name">{influencer.platform}</p>
+                      <p className="platform-name text-dark">{influencer.platform}</p>
                     </div>
                     <div className="col-6">
-                      <p>{influencer.followers}</p>
+                      <p className="text-dark">{influencer.followers}</p>
                     </div>
                     <div className="col-6">
                       <button
@@ -93,13 +93,13 @@ function StarpowersVIP() {
           {selectedInfluencer && (
             <Container fluid className="p-4" style={{ backgroundColor: '#0D1B2A', color: '#ffffff' }}>
               <Row>
-                <Col md={5} className="text-center"> {/* Ubah ukuran kolom gambar */}
+                <Col md={5} className="text-center">
                   <Image
                     src={selectedInfluencer.image}
                     className="mb-3 custom-image"
                   />
                 </Col>
-                <Col md={7}> {/* Ubah ukuran kolom teks */}
+                <Col md={7}>
                   <Row className="mb-3">
                     <Col>
                       <FaInstagram style={{ width: '30px', height: '30px' }} />

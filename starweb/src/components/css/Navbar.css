@@ -22,7 +22,7 @@
 
 
 .gap {
-    gap: 100px;
+    gap: 40px;
 }
 
 .nav-link-custom:hover::after,
