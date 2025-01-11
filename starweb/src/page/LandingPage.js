@@ -6,6 +6,7 @@ import StarpowersVIP from "../components/landing/StarpowersVIP";
 import AboutStarpowers from "../components/landing/AboutStarpowers";
 import WhyStarpowers from "../components/landing/WhyStarpowers";
 import DiscountSection from "../components/landing/DiscountSection";
+import Footer from "../components/landing/Footer";
 
 function LandingPage() {
   return (
@@ -17,6 +18,7 @@ function LandingPage() {
         <AboutStarpowers />
         <WhyStarpowers />
         <DiscountSection />
+        <Footer />
     </>
   );
 }

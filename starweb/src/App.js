@@ -9,6 +9,11 @@ function App() {
       <Routes>
         {/* Landing Page Route */}
         <Route path="/" element={<LandingPage />} />
+        
+
+
+
+
 
         {/* Tambahkan route lain di sini */}
       </Routes>

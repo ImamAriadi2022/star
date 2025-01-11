@@ -44,17 +44,59 @@
   width: 100%;
 }
 
-
-.jenis{
-    background-color:blue;
-    border-radius: 8px;
-    padding: 5px;
-    color: #fff;
+.jenis {
+  background-color: blue;
+  border-radius: 8px;
+  padding: 5px;
+  color: #fff;
 }
 
-
 .medsos {
-    color : #333;
-    font-size: 20px;
-    font-weight: bold;
+  color: #333;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.starpowers-vip {
+  background-color: #001A46;
+}
+
+.card {
+  background-color: #142B47;
+  color: #ffffff;
+  border: none;
+}
+
+.card-body {
+  color: #ffffff;
+}
+
+.btn-book-now {
+  background-color: #003E87;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-book-now:hover {
+  background-color: #002855;
+}
+
+.modal-content {
+  background-color: #0D1B2A;
+  color: #ffffff;
+}
+
+.modal-header, .modal-footer {
+  border: none;
+}
+
+.modal-title {
+  color: #ffffff;
+}
+
+.custom-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px; /* Adjust the value as needed */
+  object-fit: cover;
 }

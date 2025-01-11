@@ -16,7 +16,9 @@ function AboutStarpowers() {
             Starpowers adalah platform influencer marketing terkemuka di Indonesia, dengan ribuan influencer dari beragam platform digital seperti Instagram, Facebook, Twitter, dan YouTube. Mereka mewakili berbagai industri, termasuk Travel, Fashion, F&B, Beauty, Mom & Parenting, 
             dan lainnya. Bersama kami, brand Anda siap untuk meningkatkan kesadaran dan keterlibatan di ranah digital.
             </p>
-            <button className="btn btn-primary">Join Us</button>
+            <a href="/">
+              <button className="btn btn-primary">Join Us</button>
+            </a>
           </div>
         </div>
       </div>

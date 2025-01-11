@@ -7,7 +7,9 @@ function DiscountSection() {
       <div className="container text-center text-white" style={{ backgroundImage: `url(landing/bg-bawah.png)`}}>
       <div className="container2">
         <h2 className="text-dark">Don’t Miss The 50% Discount if You Register Today</h2>
-        <button className="btn btn-dark mt-3">Register Today</button>
+        <a href="/">
+        <button  className="btn btn-dark mt-3">Register Today</button>
+        </a>
       </div>
       </div>
     </section>

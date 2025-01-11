@@ -1,11 +1,10 @@
 import React from "react";
 import "../css/HeroSection.css"; // Pastikan Anda membuat file CSS terpisah
 
-
 function HeroSection() {
   return (
     <section className="hero-section text-start">
-      <div className="container text-start">
+      <div className="container text-start hero">
         <h1 className="hero-title">
           Elevate Your Brand<br />Expand Your Influence
         </h1>
