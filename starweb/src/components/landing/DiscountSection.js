@@ -1,11 +1,14 @@
 import React from "react";
+import "../css/DiscountSection.css"; // Pastikan untuk mengimpor file CSS
 
 function DiscountSection() {
   return (
-    <section className="discount-section py-5 text-center text-white">
-      <div className="container">
-        <h2>Don’t Miss The 50% Discount if You Register Today</h2>
+    <section className="discount-section py-5 align-items-center d-flex justify-content-center">
+      <div className="container text-center text-white" style={{ backgroundImage: `url(landing/bg-bawah.png)`}}>
+      <div className="container2">
+        <h2 className="text-dark">Don’t Miss The 50% Discount if You Register Today</h2>
         <button className="btn btn-dark mt-3">Register Today</button>
+      </div>
       </div>
     </section>
   );
