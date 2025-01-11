@@ -1,14 +1,14 @@
 import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import '../css/Navbar.css'; 
+import '../../css/influencer/Navbar.css'; 
 
 function NavigationBar() {
   return (
-    <Navbar expand="lg">
+    <Navbar expand="lg" className="navbar-transparent fixed-top">
       <Container>
         <Navbar.Brand className="p-3" as={Link} to="/">
-        <img src="landing/navbar/logo.png" alt="Starpowers" />
+          <img src="landing/navbar/logo.png" alt="Starpowers" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

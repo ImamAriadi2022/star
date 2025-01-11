@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Container, Row, Col, Image, Card } from "react-bootstrap";
+import { Modal, Button, Container, Row, Col, Image } from "react-bootstrap";
 import { FaInstagram } from "react-icons/fa";
 import "../css/StarpowersVIP.css";
 
@@ -58,7 +58,7 @@ function StarpowersVIP() {
                     <div className="col-12 d-flex align-items-center">
                       <p className="content-type jenis">{influencer.type}</p>
                       <br className="mx-1" />
-                      <p className="content-type medsos">{influencer.platform}</p>
+                      <p className="content-type medsos mx-2 text-light">{influencer.platform}</p>
                     </div>
                     <div className="col-12">
                       <h5 className="creator-name">{influencer.name}</h5>
@@ -93,13 +93,13 @@ function StarpowersVIP() {
           {selectedInfluencer && (
             <Container fluid className="p-4" style={{ backgroundColor: '#0D1B2A', color: '#ffffff' }}>
               <Row>
-                <Col md={4} className="text-center">
+                <Col md={5} className="text-center"> {/* Ubah ukuran kolom gambar */}
                   <Image
                     src={selectedInfluencer.image}
                     className="mb-3 custom-image"
                   />
                 </Col>
-                <Col md={8}>
+                <Col md={7}> {/* Ubah ukuran kolom teks */}
                   <Row className="mb-3">
                     <Col>
                       <FaInstagram style={{ width: '30px', height: '30px' }} />

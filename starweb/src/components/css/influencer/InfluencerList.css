@@ -1,0 +1,28 @@
+.home-section {
+  background-color: #FFC300;
+  height: 137vh; /* Tinggi memenuhi layar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-content {
+  text-align: center;
+  height: auto; /* Sesuaikan tinggi konten */
+  margin: 0 10%; /* Menambahkan margin kiri dan kanan */
+}
+
+.text-dark {
+  color: #000 !important;
+}
+
+.text-start {
+  text-align: left !important;
+}
+
+.bg-white-rounded {
+  background-color: white;
+  border-radius: 8px; /* Sudut tumpul */
+  padding: 10px; /* Padding untuk ruang di sekitar teks */
+  margin-bottom: 15px; /* Margin bawah untuk memberi jarak antar elemen */
+}
