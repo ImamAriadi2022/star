@@ -1,11 +1,11 @@
 import React from "react";
-import NavigationBar from "../components/Navbar";
-import HeroSection from "../components/HeroSection";
-import Review from "../components/Review";
-import StarpowersVIP from "../components/StarpowersVIP";
-import AboutStarpowers from "../components/AboutStarpowers";
-import WhyStarpowers from "../components/WhyStarpowers";
-import DiscountSection from "../components/DiscountSection";
+import NavigationBar from "../components/landing/Navbar";
+import HeroSection from "../components/landing/HeroSection";
+import Review from "../components/landing/Review";
+import StarpowersVIP from "../components/landing/StarpowersVIP";
+import AboutStarpowers from "../components/landing/AboutStarpowers";
+import WhyStarpowers from "../components/landing/WhyStarpowers";
+import DiscountSection from "../components/landing/DiscountSection";
 
 function LandingPage() {
   return (

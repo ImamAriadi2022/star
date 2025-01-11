@@ -10,7 +10,7 @@ function StarpowersVIP() {
         <div className="row text-center pt-5">
           <div className="col-md-4">
             <div className="card">
-              <img src="influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
+              <img src="landing/influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
               <div className="card-body">
                 <div className="row text-start px-4">
                   <div className="col-12 d-flex align-items-center">
@@ -36,7 +36,7 @@ function StarpowersVIP() {
           </div>
           <div className="col-md-4">
             <div className="card">
-              <img src="influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
+              <img src="landing/influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
               <div className="card-body">
                 <div className="row text-start px-4">
                   <div className="col-12 d-flex align-items-center">
@@ -62,7 +62,7 @@ function StarpowersVIP() {
           </div>
           <div className="col-md-4">
             <div className="card">
-              <img src="influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
+              <img src="landing/influencer/art1.png" alt="Influencer" className="card-img-top p-3 custom-border-radius" />
               <div className="card-body">
                 <div className="row text-start px-4">
                   <div className="col-12 d-flex align-items-center">
