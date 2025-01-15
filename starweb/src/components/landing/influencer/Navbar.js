@@ -14,9 +14,9 @@ function NavigationBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto text-white gap">
             <Nav.Link className="text-white nav-link-custom" as={Link} to="/lp-influencer">Influencer</Nav.Link>
-            <Nav.Link className="text-white nav-link-custom" as={Link} to="/">Starpowers VIP</Nav.Link>
-            <Nav.Link className="text-white nav-link-custom" as={Link} to="/">FAQ</Nav.Link>
-            <Nav.Link className="text-white nav-link-custom" as={Link} to="/">News</Nav.Link>
+            <Nav.Link className="text-white nav-link-custom" as={Link} to="/lp-vip">Starpowers VIP</Nav.Link>
+            <Nav.Link className="text-white nav-link-custom" as={Link} to="/lp-faq">FAQ</Nav.Link>
+            <Nav.Link className="text-white nav-link-custom" as={Link} to="/lp-news">News</Nav.Link>
             <Button variant="outline-light" as={Link} to="/">Join Us</Button>
           </Nav>
         </Navbar.Collapse>
