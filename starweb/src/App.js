@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./page/LandingPage";
 import Influencer from "./page/Influencer";
+import StarVip from "./page/StarVip";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
         {/* Landing Page Route */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/lp-influencer" element={<Influencer />} />
-
+        <Route path="/lp-vip" element={<StarVip />} />
 
 
 
