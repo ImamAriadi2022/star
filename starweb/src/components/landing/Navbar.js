@@ -8,7 +8,7 @@ function NavigationBar() {
     <Navbar expand="lg">
       <Container>
         <Navbar.Brand className="p-3" as={Link} to="/">
-        <img src="landing/navbar/logo.png" alt="Starpowers" />
+          <img src="/landing/navbar/logo.png" alt="Starpowers" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
