@@ -77,18 +77,22 @@ function FaqSect() {
               </Button>
             </div>
           </Col>
-          <Col md={8}>
+          <Col md={8} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '5px' }}>
+            <h3 style={{ color: '#001D3D', fontWeight: 'bold' }}>
+              {selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)}
+            </h3>
             {faqData[selectedCategory].map((faq, index) => (
               <div key={index} style={{ marginBottom: '10px' }}>
                 <div
                   onClick={() => toggleAnswer(index)}
                   style={{
                     cursor: 'pointer',
-                    backgroundColor: '#FFC300',
+                    backgroundColor: 'white',
                     color: '#001D3D',
                     padding: '10px',
                     borderRadius: '5px',
                     fontWeight: 'bold',
+                    border: '1px solid #FFC300',
                   }}
                 >
                   {faq.question}
