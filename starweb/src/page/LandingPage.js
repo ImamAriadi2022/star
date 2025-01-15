@@ -11,14 +11,14 @@ import Footer from "../components/landing/Footer";
 function LandingPage() {
   return (
     <>
-        <NavigationBar />
-        <HeroSection />
-        <Review />
-        <StarpowersVIP />
-        <AboutStarpowers />
-        <WhyStarpowers />
-        <DiscountSection />
-        <Footer />
+      <NavigationBar />
+      <HeroSection />
+      <Review className="landing-page-review" />
+      <StarpowersVIP />
+      <AboutStarpowers />
+      <WhyStarpowers />
+      <DiscountSection />
+      <Footer />
     </>
   );
 }

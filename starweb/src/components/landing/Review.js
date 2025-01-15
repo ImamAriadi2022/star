@@ -1,9 +1,9 @@
 import React from "react";
-import "../css/Review.css"; // Pastikan Anda membuat file CSS terpisah
+import "../css/Review.css";
 
-function Review() {
+function Review({ className }) {
   return (
-    <section className="review-section">
+    <section className={`review-section ${className}`}>
       <div className="review-container">
         <div className="review-item d-flex">
           <div className="review-icon">
@@ -14,7 +14,7 @@ function Review() {
             <p className="review-label">Influencer</p>
           </div>
         </div>
-        <div className="review-item ">
+        <div className="review-item">
           <div className="review-icon">
             <img src="landing/brandIcon.png" alt="Brands Icon" />
           </div>
