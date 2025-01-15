@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 
 const faqData = {
   influencer: [
@@ -37,25 +37,45 @@ function FaqSect() {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
+  const buttonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? '#FFC300' : 'transparent',
+    color: isSelected ? '#001D3D' : '#FFC300',
+    fontWeight: 'bold',
+    borderColor: '#FFC300',
+    width: '100%',
+    marginBottom: '10px',
+  });
+
+  const buttonHoverStyle = {
+    backgroundColor: '#FFC300',
+    color: '#001D3D',
+  };
+
   return (
-    <section style={{ padding: '50px 0', backgroundColor: '#f8f9fa' }}>
+    <section style={{ padding: '50px 0', backgroundColor: '#001D3D' }}>
       <Container>
         <Row>
           <Col md={4}>
-            <Button
-              variant={selectedCategory === 'influencer' ? 'primary' : 'outline-primary'}
-              onClick={() => handleCategoryChange('influencer')}
-              className="mb-3 w-100"
-            >
-              Influencer
-            </Button>
-            <Button
-              variant={selectedCategory === 'brand' ? 'primary' : 'outline-primary'}
-              onClick={() => handleCategoryChange('brand')}
-              className="w-100"
-            >
-              Brand
-            </Button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <Button
+                variant="outline-warning"
+                onClick={() => handleCategoryChange('influencer')}
+                style={buttonStyle(selectedCategory === 'influencer')}
+                onMouseEnter={(e) => (e.target.style = buttonHoverStyle)}
+                onMouseLeave={(e) => (e.target.style = buttonStyle(selectedCategory === 'influencer'))}
+              >
+                Influencer
+              </Button>
+              <Button
+                variant="outline-warning"
+                onClick={() => handleCategoryChange('brand')}
+                style={buttonStyle(selectedCategory === 'brand')}
+                onMouseEnter={(e) => (e.target.style = buttonHoverStyle)}
+                onMouseLeave={(e) => (e.target.style = buttonStyle(selectedCategory === 'brand'))}
+              >
+                Brand
+              </Button>
+            </div>
           </Col>
           <Col md={8}>
             {faqData[selectedCategory].map((faq, index) => (
@@ -64,10 +84,11 @@ function FaqSect() {
                   onClick={() => toggleAnswer(index)}
                   style={{
                     cursor: 'pointer',
-                    backgroundColor: '#007bff',
-                    color: 'white',
+                    backgroundColor: '#FFC300',
+                    color: '#001D3D',
                     padding: '10px',
                     borderRadius: '5px',
+                    fontWeight: 'bold',
                   }}
                 >
                   {faq.question}
@@ -76,8 +97,9 @@ function FaqSect() {
                   <div
                     style={{
                       backgroundColor: 'white',
+                      color: '#001D3D',
                       padding: '10px',
-                      border: '1px solid #007bff',
+                      border: '1px solid #FFC300',
                       borderRadius: '5px',
                       marginTop: '5px',
                     }}
