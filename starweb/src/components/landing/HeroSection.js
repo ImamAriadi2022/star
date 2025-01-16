@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../css/HeroSection.css"; // Pastikan Anda membuat file CSS terpisah
 
 function HeroSection() {
@@ -14,8 +15,12 @@ function HeroSection() {
         </p>
         <div className="hero-search d-flex justify-content-between">
           <div className="hero-buttons d-flex">
-            <button className="btn btn-brand">Saya Pemilik Brand</button>
-            <button className="btn btn-influencer">Saya Seorang Influencer</button>
+            <Link to="/brand" className="btn btn-brand">
+              Saya Pemilik Brand
+            </Link>
+            <Link to="/influencer/login" className="btn btn-influencer">
+              Saya Seorang Influencer
+            </Link>
           </div>
           <button className="btn btn-promo">PROMOSIKAN IKLAN BRAND KAMU DISINI</button>
         </div>
