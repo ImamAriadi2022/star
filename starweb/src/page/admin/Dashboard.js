@@ -3,6 +3,10 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import NavbarAdmin from '../../components/admin/navbaradmin';
 import Sidebar from '../../components/admin/Sidebar';
 import Home from '../../components/admin/Home';
+import Influencer from '../../components/admin/Influencer';
+import Brand from '../../components/admin/Brand';
+import StartVip from '../../components/admin/StartVip';
+import Articles from '../../components/admin/Articles';
 import ErrorBoundary from '../../components/ErrorBoundary';
 // Import other components as needed
 
@@ -96,6 +100,10 @@ function DashboardAdmin() {
           )}
           <Routes>
             <Route path="home" element={<Home />} />
+            <Route path="influencers" element={<Influencer />} />
+            <Route path="brands" element={<Brand />} />
+            <Route path="vip" element={<StartVip />} />
+            <Route path="articles" element={<Articles />} />
             {/* Add routes for other components */}
           </Routes>
         </div>

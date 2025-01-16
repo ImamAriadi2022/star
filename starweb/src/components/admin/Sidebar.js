@@ -32,12 +32,11 @@ function Sidebar() {
     <div style={sidebarStyle}>
       <Nav className="flex-column">
         <Link to="/admin/dashboard" style={headerLinkStyle}>Admin Dashboard</Link>
-        <Link to="/admin/dashboard/home" style={linkStyle}>Home</Link>
+        <Link to="/admin/dashboard/transaksi" style={linkStyle}>Transaksi</Link>
         <Link to="/admin/dashboard/influencers" style={linkStyle}>Influencers</Link>
         <Link to="/admin/dashboard/brands" style={linkStyle}>Brands</Link>
         <Link to="/admin/dashboard/vip" style={linkStyle}>Starpower VIP</Link>
         <Link to="/admin/dashboard/articles" style={linkStyle}>Articles</Link>
-        <Link to="/admin/dashboard/transactions" style={linkStyle}>Transactions</Link>
       </Nav>
     </div>
   );

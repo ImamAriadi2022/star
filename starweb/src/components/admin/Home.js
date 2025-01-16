@@ -1,66 +1,126 @@
-import React, { useEffect, useRef } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
 import Chart from 'chart.js/auto';
 
 function Home() {
-  const influencerChartRef = useRef(null);
-  const brandChartRef = useRef(null);
+  const transactionChartRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const influencerData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  const transactionData = {
+    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
     datasets: [
       {
-        label: 'Influencers',
-        data: [12, 19, 3, 5, 2, 3],
+        label: 'Transaksi',
+        data: [150, 200, 300, 250, 400, 350],
         fill: false,
-        backgroundColor: 'rgb(75, 192, 192)',
-        borderColor: 'rgba(75, 192, 192, 0.2)',
+        backgroundColor: 'rgb(54, 162, 235)',
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
       },
     ],
   };
 
-  const brandData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-      {
-        label: 'Brands',
-        data: [2, 3, 20, 5, 1, 4],
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.2)',
-      },
-    ],
-  };
+  const transactions = [
+    { brand: 'Brand1', influencer: 'Influencer1', campaign: 'Kampanye A', price: 150000 },
+    { brand: 'Brand2', influencer: 'Influencer2', campaign: 'Kampanye B', price: 200000 },
+    { brand: 'Brand3', influencer: 'Influencer3', campaign: 'Kampanye C', price: 300000 },
+    { brand: 'Brand4', influencer: 'Influencer4', campaign: 'Kampanye D', price: 250000 },
+    { brand: 'Brand5', influencer: 'Influencer5', campaign: 'Kampanye E', price: 400000 },
+    { brand: 'Brand6', influencer: 'Influencer6', campaign: 'Kampanye F', price: 350000 },
+  ];
 
   useEffect(() => {
-    const influencerChart = new Chart(influencerChartRef.current, {
+    const transactionChart = new Chart(transactionChartRef.current, {
       type: 'line',
-      data: influencerData,
-    });
-
-    const brandChart = new Chart(brandChartRef.current, {
-      type: 'line',
-      data: brandData,
+      data: transactionData,
+      options: {
+        scales: {
+          x: {
+            ticks: {
+              color: '#333',
+            },
+          },
+          y: {
+            ticks: {
+              color: '#333',
+            },
+          },
+        },
+      },
     });
 
     return () => {
-      influencerChart.destroy();
-      brandChart.destroy();
+      transactionChart.destroy();
     };
-  }, [influencerData, brandData]);
+  }, [transactionData]);
+
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  };
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    return (
+      searchTerm === '' ||
+      transaction.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      transaction.influencer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   return (
-    <Container>
+    <Container style={containerStyle}>
       <Row>
         <Col>
-          <h2>Influencer Data</h2>
-          <canvas ref={influencerChartRef}></canvas>
+          <h2>Data Transaksi</h2>
+          <canvas ref={transactionChartRef}></canvas>
         </Col>
       </Row>
-      <Row>
+      <Row className="mt-4">
         <Col>
-          <h2>Brand Data</h2>
-          <canvas ref={brandChartRef}></canvas>
+          <Form>
+            <Form.Group controlId="searchTerm">
+              <Form.Label>Cari berdasarkan Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Masukkan username"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col>
+          <h3>Daftar Transaksi</h3>
+          {filteredTransactions.length > 0 ? (
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Brand</th>
+                  <th>Influencer</th>
+                  <th>Kampanye</th>
+                  <th>Harga</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTransactions.map((transaction, index) => (
+                  <tr key={index}>
+                    <td>{transaction.brand}</td>
+                    <td>{transaction.influencer}</td>
+                    <td>{transaction.campaign}</td>
+                    <td>{transaction.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <Alert variant="warning">Transaksi tidak ditemukan</Alert>
+          )}
         </Col>
       </Row>
     </Container>
