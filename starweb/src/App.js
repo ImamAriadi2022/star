@@ -14,6 +14,11 @@ import Service from "./page/influencer/Service";
 import FormLogin from "./page/influencer/FormLogin";
 import Dashboard from "./page/influencer/Dashboard";
 
+
+// admin
+import Login from "./page/admin/Login";
+import DashboardAdmin from "./page/admin/Dashboard";
+
 function App() {
   return (
     <Router>
@@ -32,6 +37,10 @@ function App() {
         <Route path="/influencer/service" element={<Service />} />
         <Route path="/influencer/formlogin" element={<FormLogin />} />
         <Route path="/influencer/dashboard/*" element={<Dashboard />} />
+
+        {/* admin */}
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin/dashboard/*" element={<DashboardAdmin />} />
 
         {/* Tambahkan route lain di sini */}
       </Routes>

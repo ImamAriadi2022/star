@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form, Button, Modal, Alert, ListGroup } from 'react-bootstrap';
-import SetService from '../../components/influencer/SetService'; // Import SetService component
 
 function AkunInf() {
   const [showProfileModal, setShowProfileModal] = useState(false);
