@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function StartLogin() {
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeButton] = useState(null);
 
   const sectionStyle = {
     height: '100vh',
@@ -44,18 +45,12 @@ function StartLogin() {
             <h1>Perluas Pengaruh Brand Anda dengan Starpowers</h1>
             <p>Dengan Starpowers Brand Dashboard, Anda dapat dengan mudah berkolaborasi dengan influencer untuk menjangkau konsumen di seluruh Indonesia.</p>
             <div>
-              <Button
-                style={buttonStyle('login')}
-                onClick={() => setActiveButton('login')}
-              >
+              <Link to="/influencer/formlogin" className="btn" style={buttonStyle('login')}>
                 Login
-              </Button>
-              <Button
-                style={buttonStyle('register')}
-                onClick={() => setActiveButton('register')}
-              >
-                Register
-              </Button>
+              </Link>
+              <Link to="/influencer/signup" className="btn" style={buttonStyle('register')}>
+                    Register
+              </Link>
             </div>
           </Col>
           <Col md={6} style={rightColStyle}>

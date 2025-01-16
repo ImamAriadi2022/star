@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function SignUp() {
@@ -235,6 +234,9 @@ function SignUp() {
               </>
             )}
           </Form>
+          <Link to="/influencer/login" className="btn btn-link mt-3">
+            <FaArrowLeft /> Kembali
+          </Link>
         </div>
       </div>
 
