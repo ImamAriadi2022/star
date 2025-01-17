@@ -99,7 +99,7 @@ function DashboardAdmin() {
             </>
           )}
           <Routes>
-            <Route path="home" element={<Home />} />
+            <Route path="transaksi" element={<Home />} />
             <Route path="influencers" element={<Influencer />} />
             <Route path="brands" element={<Brand />} />
             <Route path="vip" element={<StartVip />} />

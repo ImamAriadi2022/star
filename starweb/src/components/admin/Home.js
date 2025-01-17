@@ -1,12 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
 import Chart from 'chart.js/auto';
 
 function Home() {
   const transactionChartRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [timeRange, setTimeRange] = useState('all');
 
-  const transactionData = {
+  const transactions = [
+    { brand: 'Brand1', influencer: 'Influencer1', campaign: 'Kampanye A', price: 150000 },
+    { brand: 'Brand2', influencer: 'Influencer2', campaign: 'Kampanye B', price: 200000 },
+    { brand: 'Brand3', influencer: 'Influencer3', campaign: 'Kampanye C', price: 300000 },
+    { brand: 'Brand4', influencer: 'Influencer4', campaign: 'Kampanye D', price: 250000 },
+    { brand: 'Brand5', influencer: 'Influencer5', campaign: 'Kampanye E', price: 400000 },
+    { brand: 'Brand6', influencer: 'Influencer6', campaign: 'Kampanye F', price: 350000 },
+  ];
+
+  const allTimeData = {
     labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
     datasets: [
       {
@@ -22,19 +32,72 @@ function Home() {
     ],
   };
 
-  const transactions = [
-    { brand: 'Brand1', influencer: 'Influencer1', campaign: 'Kampanye A', price: 150000 },
-    { brand: 'Brand2', influencer: 'Influencer2', campaign: 'Kampanye B', price: 200000 },
-    { brand: 'Brand3', influencer: 'Influencer3', campaign: 'Kampanye C', price: 300000 },
-    { brand: 'Brand4', influencer: 'Influencer4', campaign: 'Kampanye D', price: 250000 },
-    { brand: 'Brand5', influencer: 'Influencer5', campaign: 'Kampanye E', price: 400000 },
-    { brand: 'Brand6', influencer: 'Influencer6', campaign: 'Kampanye F', price: 350000 },
-  ];
+  const lastYearData = {
+    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
+    datasets: [
+      {
+        label: 'Transaksi',
+        data: [100, 150, 200, 180, 220, 210],
+        fill: false,
+        backgroundColor: 'rgb(54, 162, 235)',
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+    ],
+  };
+
+  const lastMonthData = {
+    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+    datasets: [
+      {
+        label: 'Transaksi',
+        data: [50, 70, 60, 80],
+        fill: false,
+        backgroundColor: 'rgb(54, 162, 235)',
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+    ],
+  };
+
+  const lastWeekData = {
+    labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+    datasets: [
+      {
+        label: 'Transaksi',
+        data: [10, 20, 15, 25, 30, 20, 25],
+        fill: false,
+        backgroundColor: 'rgb(54, 162, 235)',
+        borderColor: 'rgba(54, 162, 235, 0.8)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+    ],
+  };
+
+  const getDataByTimeRange = useCallback((range) => {
+    switch (range) {
+      case 'week':
+        return lastWeekData;
+      case 'month':
+        return lastMonthData;
+      case 'year':
+        return lastYearData;
+      case 'all':
+      default:
+        return allTimeData;
+    }
+  }, []);
 
   useEffect(() => {
     const transactionChart = new Chart(transactionChartRef.current, {
       type: 'line',
-      data: transactionData,
+      data: getDataByTimeRange(timeRange),
       options: {
         scales: {
           x: {
@@ -54,7 +117,7 @@ function Home() {
     return () => {
       transactionChart.destroy();
     };
-  }, [transactionData]);
+  }, [timeRange, getDataByTimeRange]);
 
   const containerStyle = {
     backgroundColor: 'white',
@@ -76,6 +139,19 @@ function Home() {
       <Row>
         <Col>
           <h2>Data Transaksi</h2>
+          <Form.Group controlId="timeRange">
+            <Form.Label>Filter berdasarkan Waktu</Form.Label>
+            <Form.Control
+              as="select"
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+            >
+              <option value="all">Semua Waktu</option>
+              <option value="week">1 Minggu Terakhir</option>
+              <option value="month">1 Bulan Terakhir</option>
+              <option value="year">1 Tahun Terakhir</option>
+            </Form.Control>
+          </Form.Group>
           <canvas ref={transactionChartRef}></canvas>
         </Col>
       </Row>
