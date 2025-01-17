@@ -22,6 +22,7 @@ import DashboardAdmin from "./page/admin/Dashboard";
 // brand
 import StartPage from "./page/brand/Start";
 import FormLoginBrand from "./page/brand/Login";
+import Sign from "./page/brand/Sign";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         {/* brand */}
         <Route path="/brand" element={<StartPage />} />
         <Route path="/brand/formlogin" element={<FormLoginBrand />} />
+        <Route path="/brand/signup" element={<Sign />} />
 
 
         {/* Tambahkan route lain di sini */}
