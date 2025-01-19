@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function SignUp() {
   const [step, setStep] = useState(1);
@@ -19,6 +20,7 @@ function SignUp() {
     npwpNumber: '',
     instagramLink: '',
     followersCount: '',
+    profilePicture: null, // Add this line
   });
   const [isValidated, setIsValidated] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +28,10 @@ function SignUp() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, profilePicture: e.target.files[0] });
   };
 
   const handleTogglePassword = () => {
@@ -36,14 +42,27 @@ function SignUp() {
     setIsValidated(e.target.checked);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (step === 1) {
       setStep(2);
     } else {
       // Handle final form submission
-      console.log('Form submitted:', formData);
-      setShowModal(true);
+      try {
+        const formDataToSend = new FormData();
+        for (const key in formData) {
+          formDataToSend.append(key, formData[key]);
+        }
+        const response = await axios.post('http://localhost/star-1/backend/signinfluencer.php', formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('Form submitted:', response.data);
+        setShowModal(true);
+      } catch (error) {
+        console.error('There was an error submitting the form!', error);
+      }
     }
   };
 
@@ -221,6 +240,15 @@ function SignUp() {
                     name="followersCount"
                     value={formData.followersCount}
                     onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="formProfilePicture"> {/* Add this section */}
+                  <Form.Label>Foto Profil</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="profilePicture"
+                    onChange={handleFileChange}
                     required
                   />
                 </Form.Group>

@@ -217,7 +217,7 @@ function SignSect() {
               Daftar
             </Button>
           </Form>
-          <Link to="/brand/login" className="btn btn-link mt-3">
+          <Link to="/" className="btn btn-link mt-3">
             <FaArrowLeft /> Kembali
           </Link>
         </div>

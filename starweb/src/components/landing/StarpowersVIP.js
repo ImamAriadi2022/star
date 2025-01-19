@@ -1,38 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Container, Row, Col, Image } from "react-bootstrap";
 import { FaInstagram } from "react-icons/fa";
+import axios from "axios";
 import "../css/StarpowersVIP.css";
-
-const influencers = [
-  {
-    id: 1,
-    name: "@dvvspyfff_",
-    type: "Beauty",
-    platform: "Instagram",
-    followers: "3.6K Followers",
-    image: "landing/influencer/art1.png",
-  },
-  {
-    id: 2,
-    name: "@another_influencer",
-    type: "Fashion",
-    platform: "Instagram",
-    followers: "5.2K Followers",
-    image: "landing/influencer/art1.png",
-  },
-  {
-    id: 3,
-    name: "@third_influencer",
-    type: "Travel",
-    platform: "Instagram",
-    followers: "10K Followers",
-    image: "landing/influencer/art1.png",
-  },
-];
 
 function StarpowersVIP() {
   const [show, setShow] = useState(false);
   const [selectedInfluencer, setSelectedInfluencer] = useState(null);
+  const [influencers, setInfluencers] = useState([]);
+
+  useEffect(() => {
+    fetchInfluencers();
+  }, []);
+
+  const fetchInfluencers = async () => {
+    try {
+      const response = await axios.get('http://localhost/star-1/backend/signinfluencer.php');
+      setInfluencers(response.data);
+    } catch (error) {
+      console.error("There was an error fetching the influencers!", error);
+    }
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = (influencer) => {
@@ -49,25 +37,25 @@ function StarpowersVIP() {
             <div className="col-md-4" key={influencer.id}>
               <div className="card mb-4" style={{ backgroundColor: 'white', borderRadius: '12px' }}>
                 <img
-                  src={influencer.image}
+                  src={`http://localhost/star-1/backend/${influencer.profile_picture}`}
                   alt="Influencer"
                   className="card-img-top p-3 custom-border-radius"
                 />
                 <div className="card-body">
                   <div className="row text-start px-4">
                     <div className="col-12 d-flex align-items-center">
-                      <p className="content-type jenis">{influencer.type}</p>
+                      <p className="content-type jenis">{influencer.influencer_category}</p>
                       <br className="mx-1" />
                       <p className="content-type medsos mx-2 text-dark">{influencer.platform}</p>
                     </div>
                     <div className="col-12">
-                      <h5 className="creator-name text-dark">{influencer.name}</h5>
+                      <h5 className="creator-name text-dark">{influencer.full_name}</h5>
                     </div>
                     <div className="col-12">
                       <p className="platform-name text-dark">{influencer.platform}</p>
                     </div>
                     <div className="col-6">
-                      <p className="text-dark">{influencer.followers}</p>
+                      <p className="text-dark">{influencer.followers_count} Followers</p>
                     </div>
                     <div className="col-6">
                       <button
@@ -95,7 +83,7 @@ function StarpowersVIP() {
               <Row>
                 <Col md={5} className="text-center">
                   <Image
-                    src={selectedInfluencer.image}
+                    src={`http://localhost/star-1/backend/${selectedInfluencer.profile_picture}`}
                     className="mb-3 custom-image"
                   />
                 </Col>
@@ -103,19 +91,19 @@ function StarpowersVIP() {
                   <Row className="mb-3">
                     <Col>
                       <FaInstagram style={{ width: '30px', height: '30px' }} />
-                      <h5 className="d-inline-block ms-2">{selectedInfluencer.name}</h5>
+                      <h5 className="d-inline-block ms-2">{selectedInfluencer.full_name}</h5>
                     </Col>
                   </Row>
                   <Row className="mb-3">
                     <Col>
-                      <p>Jenis Kelamin: Pria</p>
+                      <p>Jenis Kelamin: {selectedInfluencer.gender}</p>
                       <p>Asal Kota: Bandung</p>
                     </Col>
                   </Row>
                   <Row className="mb-3">
                     <Col md={3}>
                       <h6>Followers</h6>
-                      <p className="text-warning">{selectedInfluencer.followers}</p>
+                      <p className="text-warning">{selectedInfluencer.followers_count}</p>
                     </Col>
                     <Col md={3}>
                       <h6>Likes</h6>
@@ -137,7 +125,7 @@ function StarpowersVIP() {
                     </Col>
                     <Col>
                       <h6>Kategori</h6>
-                      <p>Entertainment</p>
+                      <p>{selectedInfluencer.influencer_category}</p>
                     </Col>
                   </Row>
                   <Row className="mb-3">
