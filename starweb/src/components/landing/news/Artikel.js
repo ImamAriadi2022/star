@@ -1,50 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
-const articles = [
-  {
-    id: 1,
-    title: "Article 1",
-    excerpt: "This is a short summary of Article 1.",
-    image: "/path/to/image1.jpg", // Replace with the actual path to the image
-  },
-  {
-    id: 2,
-    title: "Article 2",
-    excerpt: "This is a short summary of Article 2.",
-    image: "/path/to/image2.jpg", // Replace with the actual path to the image
-  },
-  {
-    id: 3,
-    title: "Article 3",
-    excerpt: "This is a short summary of Article 3.",
-    image: "/path/to/image3.jpg", // Replace with the actual path to the image
-  },
-];
+import axios from 'axios';
 
 function Artikel() {
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get('http://localhost/star-1/backend/artikel.php');
+        setArticles(response.data);
+      } catch (error) {
+        console.error("There was an error fetching the articles!", error);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
   return (
-    <section style={{ padding: '50px 0', background: 'linear-gradient(to bottom, #FFC300, #001D3D)' }}>
-      <Container>
-        <Row>
-          {articles.map((article) => (
-            <Col md={4} key={article.id} style={{ marginBottom: '20px' }}>
-              <Card style={{ backgroundColor: 'white' }}>
-                <Card.Img variant="top" src={article.image} alt={article.title} />
-                <Card.Body>
-                  <Card.Title style={{ color: '#001D3D' }}>{article.title}</Card.Title>
-                  <Card.Text style={{ color: '#001D3D' }}>{article.excerpt}</Card.Text>
-                  <Link to={`/lp-news/${article.id}`}>
-                    <Button variant="primary">Read More</Button>
-                  </Link>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </section>
+    <Container>
+      <Row>
+        {articles.map((article) => (
+          <Col key={article.id} md={4} className="mb-4">
+            <Card style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+              <Card.Img variant="top" src={article.image} />
+              <Card.Body>
+                <Card.Title>{article.title}</Card.Title>
+                <Card.Text>{article.excerpt}</Card.Text>
+                <Link to={`/lp-news/${article.id}`}>
+                  <Button variant="primary">Read More</Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }
 

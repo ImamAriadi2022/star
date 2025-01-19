@@ -1,36 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Table, Form } from 'react-bootstrap';
-
-const initialArticles = [
-  {
-    id: 1,
-    title: "Article 1",
-    excerpt: "This is a short summary of Article 1.",
-    content: "This is the content of Article 1.",
-    image: "/path/to/image1.jpg", // Replace with the actual path to the image
-  },
-  {
-    id: 2,
-    title: "Article 2",
-    excerpt: "This is a short summary of Article 2.",
-    content: "This is the content of Article 2.",
-    image: "/path/to/image2.jpg", // Replace with the actual path to the image
-  },
-  {
-    id: 3,
-    title: "Article 3",
-    excerpt: "This is a short summary of Article 3.",
-    content: "This is the content of Article 3.",
-    image: "/path/to/image3.jpg", // Replace with the actual path to the image
-  },
-];
+import axios from 'axios';
 
 const initialFormState = { id: null, title: '', excerpt: '', content: '', image: '' };
 
 function Articles() {
-  const [articles, setArticles] = useState(initialArticles);
+  const [articles, setArticles] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState(initialFormState);
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    const response = await axios.get('http://localhost/star-1/backend/artikel.php');
+    setArticles(response.data);
+  };
 
   const handleCreate = () => {
     setForm(initialFormState);
@@ -42,8 +28,9 @@ function Articles() {
     setIsEditing(true);
   };
 
-  const handleDelete = (id) => {
-    setArticles(articles.filter(article => article.id !== id));
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost/star-1/backend/artikel.php`, { data: { id } });
+    fetchArticles();
   };
 
   const handleChange = (e) => {
@@ -51,14 +38,25 @@ function Articles() {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSave = () => {
+  const handleFileChange = (e) => {
+    setForm({ ...form, image: e.target.files[0] });
+  };
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('excerpt', form.excerpt);
+    formData.append('content', form.content);
+    formData.append('image', form.image);
+
     if (form.id) {
-      setArticles(articles.map(article => article.id === form.id ? form : article));
+      formData.append('id', form.id);
+      await axios.put('http://localhost/star-1/backend/artikel.php', formData);
     } else {
-      setForm({ ...form, id: articles.length + 1 });
-      setArticles([...articles, { ...form, id: articles.length + 1 }]);
+      await axios.post('http://localhost/star-1/backend/artikel.php', formData);
     }
     setIsEditing(false);
+    fetchArticles();
   };
 
   return (
@@ -102,11 +100,9 @@ function Articles() {
               <Form.Group controlId="formImage" className="mt-3">
                 <Form.Label>Gambar</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="file"
                   name="image"
-                  value={form.image}
-                  onChange={handleChange}
-                  placeholder="Masukkan URL gambar"
+                  onChange={handleFileChange}
                 />
               </Form.Group>
               <Button variant="primary" className="mt-3" onClick={handleSave}>Simpan</Button>{' '}
@@ -140,7 +136,7 @@ function Articles() {
                       <td>{article.title}</td>
                       <td>{article.excerpt}</td>
                       <td>{article.content}</td>
-                      <td><img src={article.image} alt={article.title} style={{ width: '100px' }} /></td>
+                      <td><img src={`http://localhost/star-1/starweb/${article.image}`} alt={article.title} style={{ width: '100px' }} /></td>
                       <td>
                         <Button variant="warning" onClick={() => handleEdit(article)}>Edit</Button>{' '}
                         <Button variant="danger" onClick={() => handleDelete(article.id)}>Delete</Button>

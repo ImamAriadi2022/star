@@ -1,32 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-
-const faqData = {
-  influencer: [
-    {
-      question: "How do I become an influencer?",
-      answer: "To become an influencer, you need to create engaging content and grow your audience on social media platforms.",
-    },
-    {
-      question: "What are the benefits of being an influencer?",
-      answer: "As an influencer, you can earn money through brand partnerships, sponsorships, and affiliate marketing.",
-    },
-  ],
-  brand: [
-    {
-      question: "How do I collaborate with influencers?",
-      answer: "To collaborate with influencers, you can reach out to them directly or use influencer marketing platforms.",
-    },
-    {
-      question: "What are the benefits of influencer marketing?",
-      answer: "Influencer marketing helps increase brand awareness, reach a targeted audience, and drive sales.",
-    },
-  ],
-};
+import axios from 'axios';
 
 function FaqSect() {
+  const [faqData, setFaqData] = useState({ influencer: [], brand: [] });
   const [selectedCategory, setSelectedCategory] = useState('influencer');
   const [activeIndex, setActiveIndex] = useState(null);
+
+  useEffect(() => {
+    fetchFaqs();
+  }, [selectedCategory]);
+
+  const fetchFaqs = async () => {
+    try {
+      const response = await axios.get(`http://localhost/star-1/backend/faq.php?category=${selectedCategory}`);
+      setFaqData((prevData) => ({ ...prevData, [selectedCategory]: response.data }));
+    } catch (error) {
+      console.error("There was an error fetching the FAQs!", error);
+    }
+  };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
