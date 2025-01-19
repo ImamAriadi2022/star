@@ -55,16 +55,16 @@ function Sidebar() {
           <h3 style={{ color: '#FFC300', fontWeight: 'bold' }}>Menu</h3>
           <Nav className="flex-column">
             <Nav.Link
-              style={selected === '/brand/dashboard/starpowers-marketplace' ? navLinkSelectedStyle : navLinkStyle}
-              onClick={() => handleNavClick('/brand/dashboard/starpowers-marketplace')}
+              style={selected === '/brand/dashboard/marketplace' ? navLinkSelectedStyle : navLinkStyle}
+              onClick={() => handleNavClick('/brand/dashboard/marketplace')}
               onMouseEnter={(e) => {
-                if (selected !== '/brand/dashboard/starpowers-marketplace') {
+                if (selected !== '/brand/dashboard/marketplace') {
                   e.target.style.backgroundColor = navLinkHoverStyle.backgroundColor;
                   e.target.style.color = navLinkHoverStyle.color;
                 }
               }}
               onMouseLeave={(e) => {
-                if (selected !== '/brand/dashboard/starpowers-marketplace') {
+                if (selected !== '/brand/dashboard/marketplace') {
                   e.target.style.backgroundColor = 'transparent';
                   e.target.style.color = navLinkStyle.color;
                 }

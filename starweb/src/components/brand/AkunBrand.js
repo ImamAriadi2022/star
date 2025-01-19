@@ -37,7 +37,6 @@ function AkunBrand() {
   };
 
   const containerStyle = {
-    padding: '50px 0',
     backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
@@ -55,7 +54,7 @@ function AkunBrand() {
     maxWidth: '1000px',
     position: 'relative',
     marginTop: '60px',
-    marginLeft: '200px',
+    marginLeft: '15px', // Adjusted margin to move content to the left
   };
 
   const buttonContainerStyle = {

@@ -18,9 +18,9 @@ function DashboardBrand() {
         <NavbarBrand />
         <div style={dashboardStyle}>
           <Routes>
-            <Route path="/brand/dashboard/marketplace" element={<Marketplace />} />
-            <Route path="/brand/dashboard/notifikasi" element={<Notifikasi />} />
-            <Route path="/brand/dashboard/akun" element={<AkunBrand />} />
+            <Route path="marketplace" element={<Marketplace />} />
+            <Route path="notifikasi" element={<Notifikasi />} />
+            <Route path="akun" element={<AkunBrand />} />
           </Routes>
         </div>
       </div>

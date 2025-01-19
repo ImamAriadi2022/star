@@ -21,22 +21,45 @@ function Notifikasi() {
     }
   };
 
+  const containerStyle = {
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+  };
+
+  const contentStyle = {
+    backgroundColor: '#FFC300',
+    color: '#001D3D',
+    padding: '30px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    width: '100%',
+    maxWidth: '1000px',
+    position: 'relative',
+    marginTop: '60px',
+    marginLeft: '15px', // Adjusted margin to move content to the left
+  };
+
   return (
-    <Container style={{ marginTop: '20px' }}>
-      <h2>Notifications</h2>
-      <ListGroup>
-        {notifications.map((notification) => (
-          <ListGroup.Item key={notification.id}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>{notification.influencer}</span>
-              <span style={getStatusStyle(notification.status)}>
-                {notification.status.charAt(0).toUpperCase() + notification.status.slice(1)}
-              </span>
-            </div>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-    </Container>
+    <div style={containerStyle}>
+      <div style={contentStyle}>
+        <h2 className="text-center mb-4" style={{ color: '#001D3D' }}>Notifications</h2>
+        <ListGroup>
+          {notifications.map((notification) => (
+            <ListGroup.Item key={notification.id}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>{notification.influencer}</span>
+                <span style={getStatusStyle(notification.status)}>
+                  {notification.status.charAt(0).toUpperCase() + notification.status.slice(1)}
+                </span>
+              </div>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </div>
+    </div>
   );
 }
 
