@@ -59,7 +59,7 @@ function Marketplace() {
     if (step === 5) {
       const timer = setTimeout(() => {
         setStep(6); // Set step to 6 to show the payment page
-      }, 3000); // 3 detik
+      }, 19000); // 3 detik
 
       return () => clearTimeout(timer);
     }
