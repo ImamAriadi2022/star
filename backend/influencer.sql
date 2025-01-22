@@ -16,5 +16,10 @@ CREATE TABLE influencers (
   npwp_number VARCHAR(50) NOT NULL,
   instagram_link VARCHAR(255) NOT NULL,
   followers_count INT NOT NULL,
-  profile_picture VARCHAR(255) -- Add this line
+  profile_picture VARCHAR(255),
+  bank_account VARCHAR(255),
+  account_number VARCHAR(255),
+  province VARCHAR(255), -- Add this line
+  city VARCHAR(255), -- Add this line
+  registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

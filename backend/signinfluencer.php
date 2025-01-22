@@ -37,6 +37,10 @@ if ($method == 'POST') {
   $npwp_number = $conn->real_escape_string($_POST['npwpNumber']);
   $instagram_link = $conn->real_escape_string($_POST['instagramLink']);
   $followers_count = $conn->real_escape_string($_POST['followersCount']);
+  $bank_account = $conn->real_escape_string($_POST['bankAccount']);
+  $account_number = $conn->real_escape_string($_POST['accountNumber']);
+  $province = $conn->real_escape_string($_POST['province']);
+  $city = $conn->real_escape_string($_POST['city']);
   
   // Handle file upload
   $profile_picture = '';
@@ -51,7 +55,7 @@ if ($method == 'POST') {
     }
   }
 
-  $sql = "INSERT INTO influencers (email, password, full_name, birth_date, gender, influencer_category, phone_number, referral_code, ktp_number, npwp_number, instagram_link, followers_count, profile_picture) VALUES ('$email', '$password', '$full_name', '$birth_date', '$gender', '$influencer_category', '$phone_number', '$referral_code', '$ktp_number', '$npwp_number', '$instagram_link', '$followers_count', '$profile_picture')";
+  $sql = "INSERT INTO influencers (email, password, full_name, birth_date, gender, influencer_category, phone_number, referral_code, ktp_number, npwp_number, instagram_link, followers_count, profile_picture, bank_account, account_number, province, city) VALUES ('$email', '$password', '$full_name', '$birth_date', '$gender', '$influencer_category', '$phone_number', '$referral_code', '$ktp_number', '$npwp_number', '$instagram_link', '$followers_count', '$profile_picture', '$bank_account', '$account_number', '$province', '$city')";
 
   if ($conn->query($sql) === TRUE) {
     echo json_encode(["success" => "New influencer registered successfully"]);
@@ -61,7 +65,7 @@ if ($method == 'POST') {
 }
 
 if ($method == 'GET') {
-  $sql = "SELECT * FROM influencers";
+  $sql = "SELECT full_name, influencer_category, followers_count, registration_date, profile_picture, province, city FROM influencers";
   $result = $conn->query($sql);
   $influencers = [];
 

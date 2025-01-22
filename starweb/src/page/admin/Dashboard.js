@@ -8,6 +8,7 @@ import Brand from '../../components/admin/Brand';
 import StartVip from '../../components/admin/StartVip';
 import Articles from '../../components/admin/Articles';
 import FaqAdmin from '../../components/admin/FaqAdmin';
+import BankAccount from '../../components/admin/BankAccount';
 import ErrorBoundary from '../../components/ErrorBoundary';
 // Import other components as needed
 
@@ -105,7 +106,8 @@ function DashboardAdmin() {
             <Route path="brands" element={<Brand />} />
             <Route path="vip" element={<StartVip />} />
             <Route path="articles" element={<Articles />} />
-            <Route path="faq" element={<FaqAdmin />} /> {/* Add route for FaqAdmin */}
+            <Route path="faq" element={<FaqAdmin />} />
+            <Route path="bank-account" element={<BankAccount />} /> {/* Add route for BankAccount */}
             {/* Add routes for other components */}
           </Routes>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
-import Chart from 'chart.js/auto';
+import { Chart } from 'chart.js';
 
 function StartVip() {
   const influencerChartRef = useRef(null);

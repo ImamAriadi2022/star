@@ -1,19 +1,23 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
-import Chart from 'chart.js/auto';
+import { Container, Row, Col, Form, Table, Alert, Button, Modal } from 'react-bootstrap';
+import { Chart } from 'chart.js';
+import axios from 'axios';
 
 function Home() {
   const transactionChartRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [timeRange, setTimeRange] = useState('all');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [bankAccounts, setBankAccounts] = useState([]);
 
   const transactions = [
-    { brand: 'Brand1', influencer: 'Influencer1', campaign: 'Kampanye A', price: 150000 },
-    { brand: 'Brand2', influencer: 'Influencer2', campaign: 'Kampanye B', price: 200000 },
-    { brand: 'Brand3', influencer: 'Influencer3', campaign: 'Kampanye C', price: 300000 },
-    { brand: 'Brand4', influencer: 'Influencer4', campaign: 'Kampanye D', price: 250000 },
-    { brand: 'Brand5', influencer: 'Influencer5', campaign: 'Kampanye E', price: 400000 },
-    { brand: 'Brand6', influencer: 'Influencer6', campaign: 'Kampanye F', price: 350000 },
+    { id: 1, brand: 'Brand1', influencer: 'Influencer1', campaign: 'Kampanye A', price: 150000, status: 'sukses' },
+    { id: 2, brand: 'Brand2', influencer: 'Influencer2', campaign: 'Kampanye B', price: 200000, status: 'pending' },
+    { id: 3, brand: 'Brand3', influencer: 'Influencer3', campaign: 'Kampanye C', price: 300000, status: 'dibatalkan' },
+    { id: 4, brand: 'Brand4', influencer: 'Influencer4', campaign: 'Kampanye D', price: 250000, status: 'sukses' },
+    { id: 5, brand: 'Brand5', influencer: 'Influencer5', campaign: 'Kampanye E', price: 400000, status: 'pending' },
+    { id: 6, brand: 'Brand6', influencer: 'Influencer6', campaign: 'Kampanye F', price: 350000, status: 'sukses' },
   ];
 
   const allTimeData = {
@@ -134,6 +138,24 @@ function Home() {
     );
   });
 
+  const handleTransfer = async (transaction) => {
+    const amountToTransfer = transaction.price * 0.9;
+    try {
+      const response = await axios.get(`http://localhost/star-1/backend/getInfluencerBankAccounts.php?influencer=${transaction.influencer}`);
+      setBankAccounts(response.data);
+      setSelectedTransaction({ ...transaction, amountToTransfer });
+      setShowModal(true);
+    } catch (error) {
+      console.error('Terjadi kesalahan saat mengambil data rekening bank!', error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedTransaction(null);
+    setBankAccounts([]);
+  };
+
   return (
     <Container style={containerStyle}>
       <Row>
@@ -181,6 +203,8 @@ function Home() {
                   <th>Influencer</th>
                   <th>Kampanye</th>
                   <th>Harga</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -190,6 +214,14 @@ function Home() {
                     <td>{transaction.influencer}</td>
                     <td>{transaction.campaign}</td>
                     <td>{transaction.price}</td>
+                    <td>{transaction.status}</td>
+                    <td>
+                      {transaction.status === 'sukses' && (
+                        <Button variant="success" onClick={() => handleTransfer(transaction)}>
+                          Transfer Uang
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -199,6 +231,44 @@ function Home() {
           )}
         </Col>
       </Row>
+
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Transfer Uang ke Influencer</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedTransaction && (
+            <>
+              <p>Nama Influencer: {selectedTransaction.influencer}</p>
+              <p>Jumlah Transfer: Rp {selectedTransaction.amountToTransfer.toLocaleString()}</p>
+              <h5>Rekening Bank Influencer:</h5>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Jenis Bank</th>
+                    <th>Nomor Rekening</th>
+                    <th>Nama Pemilik Rekening</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {bankAccounts.map((account, index) => (
+                    <tr key={index}>
+                      <td>{account.bank_type}</td>
+                      <td>{account.account_number}</td>
+                      <td>{account.account_holder}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Tutup
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

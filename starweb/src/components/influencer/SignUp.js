@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -20,10 +20,44 @@ function SignUp() {
     npwpNumber: '',
     instagramLink: '',
     followersCount: '',
-    profilePicture: null, // Add this line
+    profilePicture: null,
+    bankAccount: '',
+    accountNumber: '',
+    province: '',
+    city: '',
   });
   const [isValidated, setIsValidated] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [manualInput, setManualInput] = useState(false);
+
+  useEffect(() => {
+    // Fetch provinces from API
+    axios.get('https://alamat.thecloudalert.com/api/provinsi/get/')
+      .then(response => {
+        setProvinces(response.data.result);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the provinces!', error);
+        setManualInput(true);
+      });
+  }, []);
+
+  const handleProvinceChange = (e) => {
+    const provinceId = e.target.value;
+    setFormData({ ...formData, province: provinceId, city: '' });
+
+    // Fetch cities based on selected province
+    axios.get(`https://alamat.thecloudalert.com/api/kabkota/get/?d_provinsi_id=${provinceId}`)
+      .then(response => {
+        setCities(response.data.result);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the cities!', error);
+        setManualInput(true);
+      });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -243,7 +277,7 @@ function SignUp() {
                     required
                   />
                 </Form.Group>
-                <Form.Group controlId="formProfilePicture"> {/* Add this section */}
+                <Form.Group controlId="formProfilePicture">
                   <Form.Label>Foto Profil</Form.Label>
                   <Form.Control
                     type="file"
@@ -251,6 +285,77 @@ function SignUp() {
                     onChange={handleFileChange}
                     required
                   />
+                </Form.Group>
+                <Form.Group controlId="formBankAccount">
+                  <Form.Label>Nama Bank</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="bankAccount"
+                    value={formData.bankAccount}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="formAccountNumber">
+                  <Form.Label>Nomor Rekening</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="accountNumber"
+                    value={formData.accountNumber}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group controlId="formProvince">
+                  <Form.Label>Pilih Provinsi</Form.Label>
+                  {manualInput ? (
+                    <Form.Control
+                      type="text"
+                      name="province"
+                      value={formData.province}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  ) : (
+                    <Form.Control
+                      as="select"
+                      name="province"
+                      value={formData.province}
+                      onChange={handleProvinceChange}
+                      required
+                    >
+                      <option value="">Pilih Provinsi</option>
+                      {provinces.map((province) => (
+                        <option key={province.id} value={province.id}>{province.text}</option>
+                      ))}
+                    </Form.Control>
+                  )}
+                </Form.Group>
+                <Form.Group controlId="formCity">
+                  <Form.Label>Pilih Kota</Form.Label>
+                  {manualInput ? (
+                    <Form.Control
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  ) : (
+                    <Form.Control
+                      as="select"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      required
+                      disabled={!formData.province}
+                    >
+                      <option value="">Pilih Kota</option>
+                      {cities.map((city) => (
+                        <option key={city.id} value={city.id}>{city.text}</option>
+                      ))}
+                    </Form.Control>
+                  )}
                 </Form.Group>
                 <Button
                   variant="primary"

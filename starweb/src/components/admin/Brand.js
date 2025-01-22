@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
-import Chart from 'chart.js/auto';
+import { Chart } from 'chart.js';
 
 function Brand() {
   const brandChartRef = useRef(null);
