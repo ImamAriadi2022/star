@@ -16,7 +16,7 @@ function StarpowersVIP() {
   const fetchInfluencers = async () => {
     try {
       const response = await axios.get('http://localhost/star-1/backend/signinfluencer.php');
-      setInfluencers(response.data);
+      setInfluencers(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("There was an error fetching the influencers!", error);
     }
@@ -33,7 +33,7 @@ function StarpowersVIP() {
       <div className="container">
         <h2 className="text-center text-white mb-4">Starpowers VIP</h2>
         <div className="row text-center pt-5">
-          {influencers.map((influencer) => (
+          {Array.isArray(influencers) && influencers.map((influencer) => (
             <div className="col-md-4" key={influencer.id}>
               <div className="card mb-4" style={{ backgroundColor: 'white', borderRadius: '12px' }}>
                 <img

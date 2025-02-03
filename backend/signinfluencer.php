@@ -78,5 +78,46 @@ if ($method == 'GET') {
   echo json_encode($influencers);
 }
 
+
+if ($method == 'PUT') {
+  $data = json_decode(file_get_contents("php://input"), true);
+  $id = $conn->real_escape_string($data['id']);
+  $email = $conn->real_escape_string($data['email']);
+  $full_name = $conn->real_escape_string($data['fullName']);
+  $birth_date = $conn->real_escape_string($data['birthDate']);
+  $gender = $conn->real_escape_string($data['gender']);
+  $influencer_category = $conn->real_escape_string($data['influencerCategory']);
+  $phone_number = $conn->real_escape_string($data['phoneNumber']);
+  $referral_code = $conn->real_escape_string($data['referralCode']);
+  $ktp_number = $conn->real_escape_string($data['ktpNumber']);
+  $npwp_number = $conn->real_escape_string($data['npwpNumber']);
+  $instagram_link = $conn->real_escape_string($data['instagramLink']);
+  $followers_count = $conn->real_escape_string($data['followersCount']);
+  $bank_account = $conn->real_escape_string($data['bankAccount']);
+  $account_number = $conn->real_escape_string($data['accountNumber']);
+  $province = $conn->real_escape_string($data['province']);
+  $city = $conn->real_escape_string($data['city']);
+
+  $sql = "UPDATE influencers SET email='$email', full_name='$full_name', birth_date='$birth_date', gender='$gender', influencer_category='$influencer_category', phone_number='$phone_number', referral_code='$referral_code', ktp_number='$ktp_number', npwp_number='$npwp_number', instagram_link='$instagram_link', followers_count='$followers_count', bank_account='$bank_account', account_number='$account_number', province='$province', city='$city' WHERE id=$id";
+
+  if ($conn->query($sql) === TRUE) {
+    echo json_encode(["success" => "Influencer updated successfully"]);
+  } else {
+    echo json_encode(["error" => "Error: " . $sql . "<br>" . $conn->error]);
+  }
+}
+
+if ($method == 'DELETE') {
+  $id = $conn->real_escape_string($_GET['id']);
+
+  $sql = "DELETE FROM influencers WHERE id=$id";
+
+  if ($conn->query($sql) === TRUE) {
+    echo json_encode(["success" => "Influencer deleted successfully"]);
+  } else {
+    echo json_encode(["error" => "Error: " . $sql . "<br>" . $conn->error]);
+  }
+}
+
 $conn->close();
 ?>

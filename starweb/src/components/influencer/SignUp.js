@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function SignUp() {
@@ -31,6 +31,7 @@ function SignUp() {
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
   const [manualInput, setManualInput] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch provinces from API
@@ -93,7 +94,12 @@ function SignUp() {
           },
         });
         console.log('Form submitted:', response.data);
-        setShowModal(true);
+        if (response.data.success) {
+          localStorage.setItem('influencer_id', response.data.influencer_id);
+          setShowModal(true);
+        } else {
+          console.error('There was an error submitting the form!', response.data.error);
+        }
       } catch (error) {
         console.error('There was an error submitting the form!', error);
       }
@@ -102,6 +108,7 @@ function SignUp() {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    navigate('/influencer/login');
   };
 
   return (
@@ -382,11 +389,9 @@ function SignUp() {
           <p className="mt-3">Anda telah berhasil mendaftar sebagai influencer!</p>
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/influencer/service">
-            <Button variant="primary" onClick={handleCloseModal}>
-              OK
-            </Button>
-          </Link>
+          <Button variant="primary" onClick={handleCloseModal}>
+            OK
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +11,8 @@ function Login() {
     password: '',
   });
   const [showModal, setShowModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,15 +23,25 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    setShowModal(true);
+    try {
+      const response = await axios.post('http://localhost/star-1/backend/login.php', formData);
+      if (response.data.success) {
+        localStorage.setItem('influencer_id', response.data.influencer_id);
+        setShowModal(true);
+      } else {
+        setErrorMessage(response.data.error);
+      }
+    } catch (error) {
+      console.error('There was an error logging in!', error);
+      setErrorMessage('There was an error logging in!');
+    }
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    navigate('/influencer/dashboard');
   };
 
   return (
@@ -39,6 +52,7 @@ function Login() {
             <img src="/landing/navbar/logo.png" alt="Logo" style={{ width: '80px', height: '40px' }} />
           </div>
           <h2 className="text-center mb-4" style={{ marginTop: '60px' }}>Login</h2>
+          {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
@@ -90,11 +104,9 @@ function Login() {
           <p className="mt-3">Anda telah berhasil login!</p>
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/influencer/dashboard">
-            <Button variant="primary" onClick={handleCloseModal}>
-              OK
-            </Button>
-          </Link>
+          <Button variant="primary" onClick={handleCloseModal}>
+            OK
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { FaCheckCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function SetService() {
   const [formData, setFormData] = useState({
+    influencer_id: '', // Add influencer_id here
     serviceName: '',
     pricePerPost: '',
     description: '',
   });
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    // Assuming influencer_id is stored in local storage after login
+    const influencerId = localStorage.getItem('influencer_id');
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      influencer_id: influencerId,
+    }));
+  }, []);
 
   const serviceTemplates = [
     { name: 'Promosi di Instagram Story', description: 'Promosi produk atau jasa di Instagram Story selama 24 jam.' },
@@ -33,11 +44,15 @@ function SetService() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Service submitted:', formData);
-    setShowModal(true);
+    try {
+      const response = await axios.post('http://localhost/star-1/backend/SetService.php', formData);
+      console.log('Service submitted:', response.data);
+      setShowModal(true);
+    } catch (error) {
+      console.error('There was an error submitting the service!', error);
+    }
   };
 
   const handleCloseModal = () => {
