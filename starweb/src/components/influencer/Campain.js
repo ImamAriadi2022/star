@@ -1,13 +1,84 @@
-import React, { useState } from 'react';
+// filepath: /c:/laragon/www/star-1/starweb/src/components/influencer/Campain.js
+import React, { useState, useEffect } from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
 function Campain() {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [campaigns, setCampaigns] = useState([]);
+  const [approvedCampaigns, setApprovedCampaigns] = useState([]);
+  const [services, setServices] = useState([]);
 
-  const campaigns = [
-    { id: 1, name: 'Brand A', title: 'Proyek A', description: 'Deskripsi Proyek A', deadline: '2023-12-31', posts: 3, brief: 'briefA.pdf', price: 'Rp 70.000' },
-    { id: 2, name: 'Brand B', title: 'Proyek B', description: 'Deskripsi Proyek B', deadline: '2024-01-15', posts: 5, brief: 'briefB.pdf', price: 'Rp 129.000' },
-  ];
+  useEffect(() => {
+    // Fetch campaigns from API
+    axios.get('http://localhost/star-1/backend/brand/marketplace.php?action=campaigns')
+      .then(response => {
+        setCampaigns(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the campaigns!', error);
+      });
+
+    // Fetch approved campaigns from API
+    axios.get('http://localhost/star-1/backend/approved_campaigns.php')
+      .then(response => {
+        setApprovedCampaigns(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the approved campaigns!', error);
+      });
+
+    // Fetch services from API
+    axios.get('http://localhost/star-1/backend/SetService.php')
+      .then(response => {
+        setServices(response.data.services);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the services!', error);
+      });
+  }, []);
+
+  const handleApprove = (campaignId) => {
+    axios.post('http://localhost/star-1/backend/brand/marketplace.php', {
+      action: 'approve',
+      campaign_id: campaignId
+    })
+      .then(response => {
+        if (response.data.success) {
+          alert('Kampanye berhasil diterima.');
+          setCampaigns(campaigns.filter(campaign => campaign.id !== campaignId));
+          setApprovedCampaigns([...approvedCampaigns, campaigns.find(campaign => campaign.id === campaignId)]);
+        } else {
+          console.error('There was an error approving the campaign!', response.data.error);
+        }
+      })
+      .catch(error => {
+        console.error('There was an error approving the campaign!', error);
+      });
+  };
+
+  const handleReject = (campaignId) => {
+    axios.post('http://localhost/star-1/backend/brand/marketplace.php', {
+      action: 'reject',
+      campaign_id: campaignId
+    })
+      .then(response => {
+        if (response.data.success) {
+          alert('Kampanye berhasil ditolak.');
+          setCampaigns(campaigns.filter(campaign => campaign.id !== campaignId));
+        } else {
+          console.error('There was an error rejecting the campaign!', response.data.error);
+        }
+      })
+      .catch(error => {
+        console.error('There was an error rejecting the campaign!', error);
+      });
+  };
+
+  const getServicePrice = (influencerId) => {
+    const service = services.find(service => service.influencer_id === influencerId);
+    return service ? service.price_per_post : 'Harga tidak tersedia';
+  };
 
   const containerStyle = {
     padding: '50px 0',
@@ -31,17 +102,6 @@ function Campain() {
     marginLeft: '200px',
   };
 
-  const downloadButtonStyle = {
-    display: 'inline-block',
-    padding: '10px 20px',
-    margin: '10px 0',
-    backgroundColor: '#007bff',
-    color: 'white',
-    borderRadius: '5px',
-    textDecoration: 'none',
-    textAlign: 'center',
-  };
-
   const buttonGroupStyle = {
     display: 'flex',
     gap: '10px',
@@ -62,33 +122,66 @@ function Campain() {
                 {selectedCampaign === campaign.id ? (
                   <>
                     <Row>
-                      <Col><strong>Tenggat Waktu:</strong></Col>
-                      <Col>{campaign.deadline}</Col>
+                      <Col><strong>Tanggal Mulai:</strong></Col>
+                      <Col>{campaign.start_date}</Col>
                     </Row>
                     <Row>
-                      <Col><strong>Jumlah Post:</strong></Col>
-                      <Col>{campaign.posts}</Col>
+                      <Col><strong>Tanggal Selesai:</strong></Col>
+                      <Col>{campaign.end_date}</Col>
                     </Row>
                     <Row>
-                      <Col><strong>Deskripsi:</strong></Col>
-                      <Col>{campaign.description}</Col>
+                      <Col><strong>Batas Waktu Proposal:</strong></Col>
+                      <Col>{campaign.proposal_deadline}</Col>
                     </Row>
                     <Row>
                       <Col><strong>Harga:</strong></Col>
-                      <Col>{campaign.price}</Col>
+                      <Col>{getServicePrice(campaign.influencer_id)}</Col>
                     </Row>
                     <Row>
                       <Col><strong>Brief:</strong></Col>
-                      <Col><a href={campaign.brief} download style={downloadButtonStyle}>Unduh Brief</a></Col>
+                      <Col>{campaign.brief}</Col>
                     </Row>
                     <div style={buttonGroupStyle}>
-                      <Button variant="success">Terima</Button>
-                      <Button variant="danger">Tolak</Button>
+                      <Button variant="success" onClick={() => handleApprove(campaign.id)}>Terima</Button>
+                      <Button variant="danger" onClick={() => handleReject(campaign.id)}>Tolak</Button>
                     </div>
                   </>
                 ) : (
                   <Button onClick={() => setSelectedCampaign(campaign.id)}>Lihat Detail</Button>
                 )}
+              </Card.Body>
+            </Card>
+          ))
+        )}
+        <h2 className="text-center mb-4">Kampanye yang Disetujui</h2>
+        {approvedCampaigns.length === 0 ? (
+          <p className="text-center">Tidak ada kampanye yang disetujui.</p>
+        ) : (
+          approvedCampaigns.map((campaign) => (
+            <Card key={campaign.id} className="mb-3">
+              <Card.Body>
+                <Card.Title>{campaign.name}</Card.Title>
+                <Card.Text>{campaign.title}</Card.Text>
+                <Row>
+                  <Col><strong>Tanggal Mulai:</strong></Col>
+                  <Col>{campaign.start_date}</Col>
+                </Row>
+                <Row>
+                  <Col><strong>Tanggal Selesai:</strong></Col>
+                  <Col>{campaign.end_date}</Col>
+                </Row>
+                <Row>
+                  <Col><strong>Batas Waktu Proposal:</strong></Col>
+                  <Col>{campaign.proposal_deadline}</Col>
+                </Row>
+                <Row>
+                  <Col><strong>Harga:</strong></Col>
+                  <Col>{getServicePrice(campaign.influencer_id)}</Col>
+                </Row>
+                <Row>
+                  <Col><strong>Brief:</strong></Col>
+                  <Col>{campaign.brief}</Col>
+                </Row>
               </Card.Body>
             </Card>
           ))

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Form, Button, Modal, Alert, ListGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Modal, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
 function AkunBrand() {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -8,12 +9,34 @@ function AkunBrand() {
   const [showEditSuccess, setShowEditSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState({
-    name: 'Brand Name',
-    email: 'brand@example.com',
-    phone: '123-456-7890',
-    address: '123 Brand St, City, Country',
-    image: 'landing/brand/logo.png',
+    email: '',
+    password: '',
+    brand_name: '',
+    pic_name: '',
+    pic_phone: '',
+    province: '',
+    city: '',
+    referral_code: '',
+    name: '',
+    phone: '',
+    address: '',
+    image: null,
   });
+
+  const brandId = localStorage.getItem('brand_id');
+
+  useEffect(() => {
+    if (brandId) {
+      // Fetch profile data from API
+      axios.get(`http://localhost/star-1/backend/brand/brand.php?brand_id=${brandId}`)
+        .then(response => {
+          setProfileData(response.data);
+        })
+        .catch(error => {
+          console.error('There was an error fetching the profile data!', error);
+        });
+    }
+  }, [brandId]);
 
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +54,19 @@ function AkunBrand() {
     }
   };
 
+  const handleSaveProfile = () => {
+    axios.put('http://localhost/star-1/backend/brand/brand.php', { ...profileData, brand_id: brandId })
+      .then(response => {
+        setShowEditSuccess(true);
+        setShowProfileModal(false);
+      })
+      .catch(error => {
+        console.error('There was an error updating the profile!', error);
+      });
+  };
+
   const handleLogout = () => {
+    localStorage.removeItem('brand_id');
     setShowLogoutAlert(false);
     window.location.href = '/';
   };
@@ -92,13 +127,37 @@ function AkunBrand() {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group controlId="formProfileName">
-                <Form.Label>Nama</Form.Label>
-                <Form.Control type="text" name="name" value={profileData.name} onChange={handleProfileChange} />
-              </Form.Group>
               <Form.Group controlId="formProfileEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control type="email" name="email" value={profileData.email} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfileBrandName">
+                <Form.Label>Nama Brand</Form.Label>
+                <Form.Control type="text" name="brand_name" value={profileData.brand_name} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfilePicName">
+                <Form.Label>Nama PIC</Form.Label>
+                <Form.Control type="text" name="pic_name" value={profileData.pic_name} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfilePicPhone">
+                <Form.Label>Telepon PIC</Form.Label>
+                <Form.Control type="text" name="pic_phone" value={profileData.pic_phone} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfileProvince">
+                <Form.Label>Provinsi</Form.Label>
+                <Form.Control type="text" name="province" value={profileData.province} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfileCity">
+                <Form.Label>Kota</Form.Label>
+                <Form.Control type="text" name="city" value={profileData.city} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfileReferralCode">
+                <Form.Label>Kode Referral</Form.Label>
+                <Form.Control type="text" name="referral_code" value={profileData.referral_code} onChange={handleProfileChange} />
+              </Form.Group>
+              <Form.Group controlId="formProfileName">
+                <Form.Label>Nama</Form.Label>
+                <Form.Control type="text" name="name" value={profileData.name} onChange={handleProfileChange} />
               </Form.Group>
               <Form.Group controlId="formProfilePhone">
                 <Form.Label>Telepon</Form.Label>
@@ -117,7 +176,7 @@ function AkunBrand() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowProfileModal(false)}>Tutup</Button>
-            <Button variant="primary" onClick={() => setShowProfileModal(false)}>Simpan</Button>
+            <Button variant="primary" onClick={handleSaveProfile}>Simpan</Button>
           </Modal.Footer>
         </Modal>
 

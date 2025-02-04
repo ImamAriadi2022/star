@@ -64,9 +64,15 @@ function SignSect() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    setShowModal(true);
+    // Kirim data ke backend PHP 
+    axios.post('http://localhost/star-1/backend/brand/register.php', formData)
+      .then(response => {
+        console.log('Form submitted:', response.data);
+        setShowModal(true);
+      })
+      .catch(error => {
+        console.error('There was an error submitting the form!', error);
+      });
   };
 
   const handleCloseModal = () => {
@@ -232,7 +238,7 @@ function SignSect() {
           <p className="mt-3">Anda telah berhasil mendaftar sebagai brand!</p>
         </Modal.Body>
         <Modal.Footer>
-          <Link to="/brand/dashboard">
+          <Link to="/brand">
             <Button variant="primary" onClick={handleCloseModal}>
               OK
             </Button>

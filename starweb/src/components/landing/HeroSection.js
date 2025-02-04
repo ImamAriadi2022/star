@@ -6,13 +6,18 @@ function HeroSection() {
   return (
     <section className="hero-section text-start">
       <div className="container text-start hero">
-        <h1 className="hero-title">
-          Elevate Your Brand<br />Expand Your Influence
-        </h1>
-        <p className="hero-description text-start">
-          Starpowers, menghubungkan merek Anda dengan influencer yang tepat, mempromosikan 
-          produk/jasa Anda dan memperluas jangkauan pasar, dari bisnis kecil hingga besar.
-        </p>
+        <div className="hero-content d-flex align-items-center mb-5">
+          <div className="hero-text flex-grow-1">
+            <h1 className="hero-title">
+              Elevate Your Brand<br />Expand Your Influence
+            </h1>
+            <p className="hero-description text-start">
+              Starpowers, menghubungkan merek Anda dengan influencer yang tepat, mempromosikan 
+              produk/jasa Anda dan memperluas jangkauan pasar, dari bisnis kecil hingga besar.
+            </p>
+          </div>
+          <img src="influencer/Logo.png" alt="Logo" className="hero-logo" />
+        </div>
         <div className="hero-search d-flex justify-content-between">
           <div className="hero-buttons d-flex">
             <Link to="/brand" className="btn btn-brand">

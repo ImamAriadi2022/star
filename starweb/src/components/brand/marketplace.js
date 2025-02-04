@@ -1,47 +1,102 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Card, Dropdown, DropdownButton, Row, Col, Spinner, Modal, Container, Image } from 'react-bootstrap';
-import { FaInstagram } from 'react-icons/fa';
+import { Button, Form, Card, Dropdown, DropdownButton, Row, Col, Spinner, Modal } from 'react-bootstrap';
+import axios from 'axios';
 
 function Marketplace() {
   const [step, setStep] = useState(1);
   const [campaignName, setCampaignName] = useState('');
   const [category, setCategory] = useState('');
-  const [selectedInfluencer, setSelectedInfluencer] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedInfluencers, setSelectedInfluencers] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [proposalDeadline, setProposalDeadline] = useState('');
   const [brief, setBrief] = useState('');
   const [showOngoing, setShowOngoing] = useState(true);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [influencers, setInfluencers] = useState([]);
+  const [ongoingCampaigns, setOngoingCampaigns] = useState([]);
+  const [campaignHistory, setCampaignHistory] = useState([]);
 
-  const categories = ['Kategori 1', 'Kategori 2', 'Kategori 3']; // Ganti dengan kategori yang sebenarnya
+  useEffect(() => {
+    // Fetch categories from API
+    axios.get('http://localhost/star-1/backend/brand/marketplace.php?action=categories')
+      .then(response => {
+        setCategories(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the categories!', error);
+      });
 
-  const influencers = [
-    { id: 1, name: 'Influencer 1', price: 'Rp 1.000.000', accountNumber: '1234567890', followers: '5K Followers', image: 'landing/influencer/art1.png', type: 'Entertainment', platform: 'Instagram' },
-    { id: 2, name: 'Influencer 2', price: 'Rp 2.000.000', accountNumber: '0987654321', followers: '6K Followers', image: 'landing/influencer/art1.png', type: 'Entertainment', platform: 'Instagram' },
-    { id: 3, name: 'Influencer 3', price: 'Rp 3.000.000', accountNumber: '1122334455', followers: '7K Followers', image: 'landing/influencer/art1.png', type: 'Entertainment', platform: 'Instagram' },
-  ]; // Ganti dengan influencer yang sebenarnya
+    // Fetch influencers from API
+    axios.get('http://localhost/star-1/backend/influencerProfile.php')
+      .then(response => {
+        setInfluencers(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the influencers!', error);
+      });
 
-  const ongoingCampaigns = [
-    { id: 1, name: 'Kampanye 1', status: 'Berlangsung' },
-    { id: 2, name: 'Kampanye 2', status: 'Berlangsung' },
-  ]; // Ganti dengan kampanye yang sedang berlangsung
+    // Fetch ongoing campaigns from API
+    axios.get('http://localhost/star-1/backend/brand/marketplace.php?action=ongoing_campaigns')
+      .then(response => {
+        setOngoingCampaigns(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the ongoing campaigns!', error);
+      });
 
-  const campaignHistory = [
-    { id: 1, name: 'Kampanye 3', status: 'Selesai' },
-    { id: 2, name: 'Kampanye 4', status: 'Selesai' },
-  ]; // Ganti dengan riwayat kampanye
+    // Fetch campaign history from API
+    axios.get('http://localhost/star-1/backend/brand/marketplace.php?action=campaign_history')
+      .then(response => {
+        setCampaignHistory(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the campaign history!', error);
+      });
+  }, []);
 
   const handleCreateCampaign = () => {
     setStep(2);
   };
 
   const handleSelectInfluencer = (influencer) => {
-    setSelectedInfluencer(influencer);
+    setSelectedInfluencers(prev => [...prev, influencer]);
+  };
+
+  const handleFilterClick = (category) => {
+    setCategory(category);
   };
 
   const handleSaveChanges = () => {
-    setStep(5); // Set step to 5 to show the waiting page
+    const categoryId = categories.find(cat => cat.name === category)?.id;
+    if (!categoryId) {
+      console.error('Category not found!');
+      return;
+    }
+
+    const newCampaign = {
+      name: campaignName,
+      category_id: categoryId,
+      influencers: selectedInfluencers.map(influencer => influencer.id),
+      start_date: startDate,
+      end_date: endDate,
+      proposal_deadline: proposalDeadline,
+      brief: brief
+    };
+
+    axios.post('http://localhost/star-1/backend/brand/marketplace.php', newCampaign)
+      .then(response => {
+        console.log(response.data); // Log the response data
+        if (response.data.success) {
+          setStep(5); // Set step to 5 to show the waiting page
+        } else {
+          console.error('There was an error creating the campaign!', response.data.error);
+        }
+      })
+      .catch(error => {
+        console.error('There was an error creating the campaign!', error);
+      });
   };
 
   const handlePayment = () => {
@@ -59,7 +114,7 @@ function Marketplace() {
     if (step === 5) {
       const timer = setTimeout(() => {
         setStep(6); // Set step to 6 to show the payment page
-      }, 19000); // 3 detik
+      }, 3000); // 3 detik
 
       return () => clearTimeout(timer);
     }
@@ -140,9 +195,9 @@ function Marketplace() {
                   title={category || 'Pilih Kategori'}
                   onSelect={(e) => setCategory(e)}
                 >
-                  {categories.map((cat, index) => (
-                    <Dropdown.Item key={index} eventKey={cat}>
-                      {cat}
+                  {categories.map((cat) => (
+                    <Dropdown.Item key={cat.id} eventKey={cat.name}>
+                      {cat.name}
                     </Dropdown.Item>
                   ))}
                 </DropdownButton>
@@ -155,25 +210,55 @@ function Marketplace() {
         {step === 3 && (
           <>
             <h2 className="text-center mb-4" style={{ color: '#001D3D' }}>Pilih Influencer</h2>
+            <div className="filter-buttons">
+              <Row>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Entertainment")}>Entertainment</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Lifestyle and Travel")}>Lifestyle and Travel</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Family and Parenting")}>Family and Parenting</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Beauty and Fashion")}>Beauty and Fashion</Button>
+                </Col>
+              </Row>
+              <Row className="mt-3">
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Health and Support")}>Health and Support</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Technology")}>Technology</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Food and Beverages")}>Food and Beverages</Button>
+                </Col>
+                <Col md={3}>
+                  <Button className="btn-filter" onClick={() => handleFilterClick("Gaming")}>Gaming</Button>
+                </Col>
+              </Row>
+            </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {influencers.map((influencer) => (
+              {influencers.filter(influencer => influencer.influencer_category === category).map((influencer) => (
                 <Card key={influencer.id} className="mb-4" style={{ backgroundColor: 'white', borderRadius: '12px', width: '18rem', margin: '10px' }}>
-                  <Card.Img variant="top" src={influencer.image} alt={influencer.name} className="p-3 custom-border-radius" />
+                  <Card.Img variant="top" src={influencer.profile_picture} alt={influencer.full_name} className="p-3 custom-border-radius" />
                   <Card.Body>
                     <div className="row text-start px-4">
                       <div className="col-12 d-flex align-items-center">
-                        <p className="content-type jenis text-light">{influencer.type}</p>
+                        <p className="content-type jenis text-light">{influencer.influencer_category}</p>
                         <br className="mx-1" />
                         <p className="content-type medsos mx-2 text-dark">{influencer.platform}</p>
                       </div>
                       <div className="col-12">
-                        <h5 className="creator-name text-dark">{influencer.name}</h5>
+                        <h5 className="creator-name text-dark">{influencer.full_name}</h5>
                       </div>
                       <div className="col-12">
                         <p className="platform-name text-dark">{influencer.platform}</p>
                       </div>
                       <div className="col-6">
-                        <p className="text-dark">{influencer.followers}</p>
+                        <p className="text-dark">{influencer.followers_count}</p>
                       </div>
                       <div className="col-6">
                         <Button className="btn btn-book-now" onClick={() => handleSelectInfluencer(influencer)}>
@@ -185,7 +270,7 @@ function Marketplace() {
                 </Card>
               ))}
             </div>
-            {selectedInfluencer && (
+            {selectedInfluencers.length > 0 && (
               <Button onClick={() => setStep(4)}>Lanjut</Button>
             )}
           </>
@@ -265,11 +350,11 @@ function Marketplace() {
               </Form.Group>
               <Form.Group controlId="influencerName">
                 <Form.Label>Nama Influencer</Form.Label>
-                <Form.Control type="text" value={selectedInfluencer?.name} readOnly />
+                <Form.Control type="text" value={selectedInfluencers.map(influencer => influencer.full_name).join(', ')} readOnly />
               </Form.Group>
               <Form.Group controlId="price">
                 <Form.Label>Harga</Form.Label>
-                <Form.Control type="text" value={selectedInfluencer?.price} readOnly />
+                <Form.Control type="text" value={selectedInfluencers.map(influencer => influencer.price).join(', ')} readOnly />
               </Form.Group>
               <Form.Group controlId="accountNumber">
                 <Form.Label>Nomor Rekening</Form.Label>

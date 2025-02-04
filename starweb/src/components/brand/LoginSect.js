@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button, InputGroup, Modal } from 'react-bootstrap';
 import { FaEye, FaEyeSlash, FaCheckCircle, FaArrowLeft } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginSect() {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +11,8 @@ function LoginSect() {
     password: '',
   });
   const [showModal, setShowModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,9 +25,27 @@ function LoginSect() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    setShowModal(true);
+    axios.post('http://localhost/star-1/backend/brand/register.php', { ...formData, action: 'login' })
+      .then(response => {
+        if (response.data.success) {
+          console.log('Login successful:', response.data);
+          // Hapus brand_id dari localStorage jika sudah ada
+          localStorage.removeItem('brand_id');
+          // Simpan brand_id ke localStorage
+          localStorage.setItem('brand_id', response.data.brand_id);
+          setShowModal(true);
+          setTimeout(() => {
+            setShowModal(false);
+            navigate('/brand/dashboard');
+          }, 2000);
+        } else {
+          setErrorMessage(response.data.error);
+        }
+      })
+      .catch(error => {
+        console.error('There was an error logging in!', error);
+        setErrorMessage('There was an error logging in!');
+      });
   };
 
   const handleCloseModal = () => {
@@ -67,6 +88,7 @@ function LoginSect() {
                 </div>
               </InputGroup>
             </Form.Group>
+            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             <Button
               variant="primary"
               type="submit"

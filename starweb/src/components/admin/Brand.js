@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
 import { Chart } from 'chart.js';
+import axios from 'axios';
 
 function Brand() {
   const brandChartRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('');
   const [timeRange, setTimeRange] = useState('all');
+  const [brands, setBrands] = useState([]);
 
   const allTimeData = {
     labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
@@ -72,14 +74,16 @@ function Brand() {
     ],
   };
 
-  const brands = [
-    { name: 'Brand1', type: 'Fashion', revenue: 12000 },
-    { name: 'Brand2', type: 'Tech', revenue: 19000 },
-    { name: 'Brand3', type: 'Food', revenue: 3000 },
-    { name: 'Brand4', type: 'Travel', revenue: 5000 },
-    { name: 'Brand5', type: 'Fitness', revenue: 2000 },
-    { name: 'Brand6', type: 'Fashion', revenue: 3000 },
-  ];
+  useEffect(() => {
+    // Fetch brands from API
+    axios.get('http://localhost/star-1/backend/admin/get_brands.php')
+      .then(response => {
+        setBrands(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the brands!', error);
+      });
+  }, []);
 
   const getDataByTimeRange = useCallback((range) => {
     switch (range) {
@@ -194,7 +198,7 @@ function Brand() {
               <tbody>
                 {filteredBrands.map((brand, index) => (
                   <tr key={index}>
-                    <td>{brand.name}</td>
+                    <td>{brand.brand_name}</td>
                     <td>{brand.type}</td>
                     <td>{brand.revenue}</td>
                   </tr>
