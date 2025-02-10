@@ -20,6 +20,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
+} else {
+  error_log("Connected successfully to the database");
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -28,20 +30,23 @@ if ($method == 'POST') {
   $data = json_decode(file_get_contents("php://input"), true);
 
   if (isset($data['action']) && $data['action'] === 'register') {
-    $email = $conn->real_escape_string($data['email']);
-    $password = password_hash($conn->real_escape_string($data['password']), PASSWORD_BCRYPT);
-    $brandName = $conn->real_escape_string($data['brandName']);
-    $picName = $conn->real_escape_string($data['picName']);
-    $picPhone = $conn->real_escape_string($data['picPhone']);
-    $province = $conn->real_escape_string($data['province']);
-    $city = $conn->real_escape_string($data['city']);
-    $referralCode = $conn->real_escape_string($data['referralCode']);
+    $email = isset($data['email']) ? $conn->real_escape_string($data['email']) : null;
+    $password = isset($data['password']) ? password_hash($conn->real_escape_string($data['password']), PASSWORD_BCRYPT) : null;
+    $brandName = isset($data['brandName']) ? $conn->real_escape_string($data['brandName']) : null;
+    $picName = isset($data['picName']) ? $conn->real_escape_string($data['picName']) : null;
+    $picPhone = isset($data['picPhone']) ? $conn->real_escape_string($data['picPhone']) : null;
+    $province = isset($data['province']) ? $conn->real_escape_string($data['province']) : null;
+    $city = isset($data['city']) ? $conn->real_escape_string($data['city']) : null;
+    $referralCode = isset($data['referralCode']) ? $conn->real_escape_string($data['referralCode']) : null;
+    $name = isset($data['name']) ? $conn->real_escape_string($data['name']) : null;
+    $address = isset($data['address']) ? $conn->real_escape_string($data['address']) : null;
 
-    $sql = "INSERT INTO brands (email, password, brand_name, pic_name, pic_phone, province, city, referral_code) VALUES ('$email', '$password', '$brandName', '$picName', '$picPhone', '$province', '$city', '$referralCode')";
+    $sql = "INSERT INTO brands (email, password, brand_name, pic_name, pic_phone, province, city, referral_code, name, address) VALUES ('$email', '$password', '$brandName', '$picName', '$picPhone', '$province', '$city', '$referralCode', '$name', '$address')";
 
     if ($conn->query($sql) === TRUE) {
       echo json_encode(["success" => "Brand was created."]);
     } else {
+      error_log("Error: " . $sql . "<br>" . $conn->error);
       echo json_encode(["error" => "Error: " . $sql . "<br>" . $conn->error]);
     }
   } elseif (isset($data['action']) && $data['action'] === 'login') {

@@ -14,8 +14,33 @@ function Articles() {
   }, []);
 
   const fetchArticles = async () => {
-    const response = await axios.get('http://localhost/star-1/backend/artikel.php');
-    setArticles(response.data);
+    try {
+      const response = await axios.get('http://localhost/star-1/backend/artikel.php');
+      let data = response.data;
+
+      // Check if response.data is not an array
+      if (!Array.isArray(data)) {
+        // Try to parse as JSON if it's a string
+        if (typeof data === 'string') {
+          try {
+            data = JSON.parse(data);
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+            data = [];
+          }
+        } else {
+          // If it's an object, wrap it in an array
+          data = [data];
+        }
+      }
+
+      // Filter out unexpected messages and take only valid articles
+      const validArticles = data.filter(item => typeof item === 'object' && item.id);
+      setArticles(validArticles);
+    } catch (error) {
+      console.error('There was an error fetching the articles!', error);
+      setArticles([]);
+    }
   };
 
   const handleCreate = () => {
@@ -131,12 +156,12 @@ function Articles() {
                   </tr>
                 </thead>
                 <tbody>
-                  {articles.map((article) => (
+                  {Array.isArray(articles) && articles.map((article) => (
                     <tr key={article.id}>
                       <td>{article.title}</td>
                       <td>{article.excerpt}</td>
                       <td>{article.content}</td>
-                      <td><img src={`http://localhost/star-1/starweb/${article.image}`} alt={article.title} style={{ width: '100px' }} /></td>
+                      <td><img src={article.image} alt={article.title} style={{ width: '100px' }} /></td>
                       <td>
                         <Button variant="warning" onClick={() => handleEdit(article)}>Edit</Button>{' '}
                         <Button variant="danger" onClick={() => handleDelete(article.id)}>Delete</Button>

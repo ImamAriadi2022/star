@@ -24,6 +24,14 @@ import FormLoginBrand from "./page/brand/Login";
 import Sign from "./page/brand/Sign";
 import DashboardBrand from "./page/brand/Dashboard";
 
+
+// debuging
+import InfluencerPage from "./coba/inf";
+import Admin from "./coba/adminPg";
+import Brand from "./coba/brandPg";
+import LoginCoba from "./coba/Login";
+import SignupCoba from "./coba/Signup";
+
 function App() {
   return (
     <Router>
@@ -52,6 +60,15 @@ function App() {
         <Route path="/brand/formlogin" element={<FormLoginBrand />} />
         <Route path="/brand/signup" element={<Sign />} />
         <Route path="/brand/dashboard/*" element={<DashboardBrand />} />
+
+
+        {/* debug */}
+        <Route path="/inf" element={<InfluencerPage />} />
+        <Route path="/admincoba" element={<Admin />} />
+        <Route path="/brandcoba" element={<Brand />} />
+        <Route path="/logincoba" element={<LoginCoba />} />
+        <Route path="/signupcoba" element={<SignupCoba />} />
+
 
         {/* Tambahkan route lain di sini */}
       </Routes>

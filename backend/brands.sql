@@ -1,12 +1,18 @@
-CREATE TABLE brands (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    brand_name VARCHAR(255) NOT NULL,
-    pic_name VARCHAR(255) NOT NULL,
-    pic_phone VARCHAR(20) NOT NULL,
-    province VARCHAR(255) NOT NULL,
-    city VARCHAR(255) NOT NULL,
-    referral_code VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+
+CREATE TABLE `brands` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `brand_name` varchar(255) DEFAULT NULL,
+  `pic_name` varchar(255) DEFAULT NULL,
+  `pic_phone` varchar(20) DEFAULT NULL,
+  `province` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `referral_code` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `name` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)

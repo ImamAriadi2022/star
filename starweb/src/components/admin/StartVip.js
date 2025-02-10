@@ -10,6 +10,8 @@ function StartVip() {
   const [timeRange, setTimeRange] = useState('all');
   const [influencers, setInfluencers] = useState([]);
   const [chartData, setChartData] = useState(null);
+  const [provinces, setProvinces] = useState([]);
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     // Fetch influencers from API
@@ -22,7 +24,29 @@ function StartVip() {
       .catch(error => {
         console.error('There was an error fetching the influencers!', error);
       });
+
+    // Fetch provinces from API
+    axios.get('https://alamat.thecloudalert.com/api/provinsi/get/')
+      .then(response => {
+        setProvinces(response.data.result);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the provinces!', error);
+      });
   }, []);
+
+  useEffect(() => {
+    // Fetch cities for each province
+    provinces.forEach(province => {
+      axios.get(`https://alamat.thecloudalert.com/api/kabkota/get/?d_provinsi_id=${province.id}`)
+        .then(response => {
+          setCities(prevCities => [...prevCities, ...response.data.result]);
+        })
+        .catch(error => {
+          console.error('There was an error fetching the cities!', error);
+        });
+    });
+  }, [provinces]);
 
   useEffect(() => {
     if (chartData) {
@@ -56,6 +80,18 @@ function StartVip() {
     padding: '20px',
     borderRadius: '10px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  };
+
+  const getProvinceName = (provinceId) => {
+    const province = provinces.find(p => p.id === provinceId);
+    console.log('Province ID:', provinceId, 'Province:', province); // Debugging log
+    return province ? province.text : 'Unknown';
+  };
+
+  const getCityName = (cityId) => {
+    const city = cities.find(c => c.id === cityId);
+    console.log('City ID:', cityId, 'City:', city); // Debugging log
+    return city ? city.text : 'Unknown';
   };
 
   const filteredInfluencers = influencers.filter((influencer) => {
@@ -117,8 +153,8 @@ function StartVip() {
                     <td>{influencer.full_name}</td>
                     <td>{influencer.influencer_category}</td>
                     <td>{influencer.followers_count}</td>
-                    <td>{influencer.province}</td>
-                    <td>{influencer.city}</td>
+                    <td>{getProvinceName(influencer.province)}</td>
+                    <td>{getCityName(influencer.city)}</td>
                   </tr>
                 ))}
               </tbody>

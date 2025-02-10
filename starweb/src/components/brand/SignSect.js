@@ -65,7 +65,13 @@ function SignSect() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Kirim data ke backend PHP 
-    axios.post('http://localhost/star-1/backend/brand/register.php', formData)
+    const dataToSend = { ...formData, action: 'register' };
+    console.log('Data to send:', dataToSend); // Log data yang akan dikirim
+    axios.post('http://localhost/star-1/backend/brand/register.php', JSON.stringify(dataToSend), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => {
         console.log('Form submitted:', response.data);
         setShowModal(true);

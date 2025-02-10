@@ -1,128 +1,26 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Container, Row, Col, Form, Table, Alert } from 'react-bootstrap';
-import { Chart } from 'chart.js';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Form, Table, Alert, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 function Brand() {
-  const brandChartRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('');
-  const [timeRange, setTimeRange] = useState('all');
   const [brands, setBrands] = useState([]);
-
-  const allTimeData = {
-    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
-    datasets: [
-      {
-        label: 'Brands',
-        data: [2, 3, 20, 5, 1, 4],
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.8)',
-        borderWidth: 3,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      },
-    ],
-  };
-
-  const lastYearData = {
-    labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
-    datasets: [
-      {
-        label: 'Brands',
-        data: [1, 2, 15, 4, 1, 3],
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.8)',
-        borderWidth: 3,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      },
-    ],
-  };
-
-  const lastMonthData = {
-    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
-    datasets: [
-      {
-        label: 'Brands',
-        data: [1, 2, 5, 3],
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.8)',
-        borderWidth: 3,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      },
-    ],
-  };
-
-  const lastWeekData = {
-    labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
-    datasets: [
-      {
-        label: 'Brands',
-        data: [1, 1, 1, 2, 1, 1, 1],
-        fill: false,
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgba(255, 99, 132, 0.8)',
-        borderWidth: 3,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      },
-    ],
-  };
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     // Fetch brands from API
     axios.get('http://localhost/star-1/backend/admin/get_brands.php')
       .then(response => {
-        setBrands(response.data);
+        console.log('Data from backend:', response.data); // Log data from backend
+        const brandsArray = Object.values(response.data); // Convert object to array
+        setBrands(brandsArray);
       })
       .catch(error => {
         console.error('There was an error fetching the brands!', error);
       });
   }, []);
-
-  const getDataByTimeRange = useCallback((range) => {
-    switch (range) {
-      case 'week':
-        return lastWeekData;
-      case 'month':
-        return lastMonthData;
-      case 'year':
-        return lastYearData;
-      case 'all':
-      default:
-        return allTimeData;
-    }
-  }, []);
-
-  useEffect(() => {
-    const brandChart = new Chart(brandChartRef.current, {
-      type: 'line',
-      data: getDataByTimeRange(timeRange),
-      options: {
-        scales: {
-          x: {
-            ticks: {
-              color: '#333',
-            },
-          },
-          y: {
-            ticks: {
-              color: '#333',
-            },
-          },
-        },
-      },
-    });
-
-    return () => {
-      brandChart.destroy();
-    };
-  }, [timeRange, getDataByTimeRange]);
 
   const containerStyle = {
     backgroundColor: 'white',
@@ -134,29 +32,25 @@ function Brand() {
   const filteredBrands = brands.filter((brand) => {
     return (
       (filterType === '' || brand.type.toLowerCase().includes(filterType.toLowerCase())) &&
-      (searchTerm === '' || brand.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      (searchTerm === '' || brand.brand_name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
   });
+
+  const handleShowModal = (brand) => {
+    setSelectedBrand(brand);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedBrand(null);
+    setShowModal(false);
+  };
 
   return (
     <Container style={containerStyle}>
       <Row>
         <Col>
           <h2>Data Brand</h2>
-          <Form.Group controlId="timeRange">
-            <Form.Label>Filter berdasarkan Waktu</Form.Label>
-            <Form.Control
-              as="select"
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-            >
-              <option value="all">Semua Waktu</option>
-              <option value="week">1 Minggu Terakhir</option>
-              <option value="month">1 Bulan Terakhir</option>
-              <option value="year">1 Tahun Terakhir</option>
-            </Form.Control>
-          </Form.Group>
-          <canvas ref={brandChartRef}></canvas>
         </Col>
       </Row>
       <Row className="mt-4">
@@ -191,16 +85,20 @@ function Brand() {
               <thead>
                 <tr>
                   <th>Nama Brand</th>
-                  <th>Tipe</th>
-                  <th>Pendapatan</th>
+                  <th>Email</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredBrands.map((brand, index) => (
                   <tr key={index}>
                     <td>{brand.brand_name}</td>
-                    <td>{brand.type}</td>
-                    <td>{brand.revenue}</td>
+                    <td>{brand.email}</td>
+                    <td>
+                      <Button variant="primary" onClick={() => handleShowModal(brand)}>
+                        Detail Profil
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -210,6 +108,26 @@ function Brand() {
           )}
         </Col>
       </Row>
+
+      {selectedBrand && (
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Detail Profil Brand</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p><strong>Email:</strong> {selectedBrand.email}</p>
+            <p><strong>Image:</strong> <img src={selectedBrand.image} alt="Brand" style={{ width: '100px' }} /></p>
+            <p><strong>Phone:</strong> {selectedBrand.phone}</p>
+            <p><strong>PIC Name:</strong> {selectedBrand.pic_name}</p>
+            <p><strong>City:</strong> {selectedBrand.city}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </Container>
   );
 }
